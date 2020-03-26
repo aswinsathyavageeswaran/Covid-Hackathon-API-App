@@ -27,17 +27,17 @@ namespace HackCovidAPI.Models
         {
             var userData = new UserModel();
 
-            var userRec = DBService.NoSqldb.GetCollection<UserModel>(collectionName);
-            var builder = Builders<UserModel>.Filter;
-            var filter = builder.Eq("Email", email);// &builder.Eq("Password", password);
-            var doc = userRec.Find(filter).FirstOrDefault();
-            if (doc != null)
-            {
-                userData.UserId = doc.UserId;
-                userData.UserType = doc.UserType;
-                userData.UserName = doc.UserName;
-            }
-            return userData;
+			var userRec = DBService.NoSqldb.GetCollection<UserModel>(collectionName);
+			var builder = Builders<UserModel>.Filter;
+			var filter = builder.Eq("Email", email);// &builder.Eq("Password", password);
+			var doc = userRec.Find(filter).FirstOrDefault();
+			if (doc != null)
+			{
+				userData.UserId = doc.UserId;
+				userData.UserType = doc.UserType;
+				userData.UserName = doc.UserName;
+			}
+			return userData;
         }
     }
 }

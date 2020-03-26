@@ -12,22 +12,22 @@ namespace HackCovidAPI.Services
     public class DBService 
     {
 
-        private static IMongoDatabase db;
-        public static IMongoDatabase NoSqldb
-        {
-            get
-            {
-                if (db == null)
-                {
-                    var datasource = ConfigurationManager.AppSettings["DataSource"];
-                    var mongoUrl = ConfigurationManager.AppSettings["MongoUrl"];
-                    MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(mongoUrl));
-                    MongoClient client = new MongoClient(settings);
-                    db = client.GetDatabase(datasource);
-                }
+		private static IMongoDatabase db;
+		public static IMongoDatabase NoSqldb
+		{
+			get
+			{
+				if (db == null)
+				{
+					var datasource = ConfigurationManager.AppSettings["DataSource"];
+					var mongoUrl = ConfigurationManager.AppSettings["MongoUrl"];
+					MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(mongoUrl));
+					MongoClient client = new MongoClient(settings);
+					db = client.GetDatabase(datasource);
+				}
 
-                return db;
-            }
-        }
-    }
+				return db;
+			}
+		}
+	}
 }

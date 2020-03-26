@@ -19,10 +19,10 @@ namespace FaceRecognitionAPI.Models
         public const string collectionName = "BusinessType";
         public List<BusinessType> GetAllBusinessTypes()
         {
-            var businessList = new List<BusinessType>();
-            var businessTypeRec = DBService.NoSqldb.GetCollection<BusinessType>(collectionName);
-            businessList = businessTypeRec.AsQueryable<BusinessType>().ToList();
-            return businessList;
+           var businessList = new List<BusinessType>();
+			var businessTypeRec = DBService.NoSqldb.GetCollection<BusinessType>(collectionName);
+			businessList = businessTypeRec.AsQueryable<BusinessType>().ToList();
+			return businessList;
         }
     }
 }

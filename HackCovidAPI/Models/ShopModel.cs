@@ -26,11 +26,11 @@ namespace FaceRecognitionAPI.Models
             var success = false;
             try
             {
-                var shopRec = DBService.NoSqldb.GetCollection<ShopModel>(collectionName);
-                var filter = Builders<ShopModel>.Filter.Eq("ShopId", shopId);
-                var update = Builders<ShopModel>.Update.Set("Status", status);
-                shopRec.UpdateOne(filter, update);
-                success = true;
+				var shopRec = DBService.NoSqldb.GetCollection<ShopModel>(collectionName);
+				var filter = Builders<ShopModel>.Filter.Eq("ShopId", shopId);
+				var update = Builders<ShopModel>.Update.Set("Status", status);
+				shopRec.UpdateOne(filter, update);
+				success = true;
             }
             catch { }
             return success;
