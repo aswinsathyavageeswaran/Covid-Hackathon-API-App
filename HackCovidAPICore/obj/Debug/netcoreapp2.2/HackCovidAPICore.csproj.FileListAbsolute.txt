@@ -1,0 +1,14 @@
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Debug\netcoreapp2.2\HackCovidAPICore.deps.json
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Debug\netcoreapp2.2\HackCovidAPICore.runtimeconfig.json
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Debug\netcoreapp2.2\HackCovidAPICore.runtimeconfig.dev.json
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Debug\netcoreapp2.2\HackCovidAPICore.dll
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Debug\netcoreapp2.2\HackCovidAPICore.pdb
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Debug\netcoreapp2.2\HackCovidAPICore.csprojAssemblyReference.cache
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Debug\netcoreapp2.2\HackCovidAPICore.csproj.CoreCompileInputs.cache
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Debug\netcoreapp2.2\HackCovidAPICore.RazorAssemblyInfo.cache
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Debug\netcoreapp2.2\HackCovidAPICore.RazorAssemblyInfo.cs
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Debug\netcoreapp2.2\HackCovidAPICore.AssemblyInfoInputs.cache
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Debug\netcoreapp2.2\HackCovidAPICore.AssemblyInfo.cs
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Debug\netcoreapp2.2\HackCovidAPICore.RazorTargetAssemblyInfo.cache
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Debug\netcoreapp2.2\HackCovidAPICore.dll
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Debug\netcoreapp2.2\HackCovidAPICore.pdb
