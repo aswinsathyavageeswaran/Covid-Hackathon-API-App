@@ -1,8 +1,10 @@
 ﻿using HackCovidAPI.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Device.Location;
 using System.Linq;
 
 namespace HackCovidAPI.Services
@@ -116,5 +118,22 @@ namespace HackCovidAPI.Services
 			}
 			return success;
 		}
+
+		public List<ShopModel> GetNearByShops(double latitude, double longitude)
+		{
+			var nearbyShops = new List<ShopModel>();
+			var currentLoc = new GeoCoordinate(latitude, longitude);
+			var shopRec = mongoDBClient.GetCollection<ShopModel>("ShopInfo");
+			var shopList = shopRec.AsQueryable().ToList();
+			shopList.ForEach(x => 
+			{
+				//x.Distance = (new GeoCoordinate(x.Latitude, x.Longitude).GetDistanceTo(currentLoc));
+				x.Distance = Math.Round((new GeoCoordinate(x.Latitude, x.Longitude).GetDistanceTo(currentLoc)) / 500, 2); 
+				x.Password = "";
+			});
+			nearbyShops = shopList.Where(x => x.Distance < 5).OrderBy(x => x.Distance).OrderBy(x => x.Status).ToList();
+			return nearbyShops;
+		}
+
 	}
 }

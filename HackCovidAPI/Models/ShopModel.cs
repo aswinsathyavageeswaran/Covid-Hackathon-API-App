@@ -6,6 +6,7 @@ using System.Web;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using System.ComponentModel.DataAnnotations;
+using System.Device.Location;
 
 namespace HackCovidAPI.Models
 {
@@ -14,7 +15,9 @@ namespace HackCovidAPI.Models
         public ObjectId _id { get; set; }
         public string ShopId { get; set; }
         public int TypeOfBusiness { get; set; }
-        public string Location { get; set; }
+        public double Distance { get; set; }
+        public  double Latitude { get; set; }
+        public double Longitude { get; set; }
         public int Status { get; set; }
         public Int64 DeliveryNumber { get; set; }
         public string WorkingHours { get; set; }
