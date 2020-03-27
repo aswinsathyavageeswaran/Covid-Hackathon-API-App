@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using HackCovidAPICore.DataAccess;
 
 namespace HackCovidAPICore
 {
@@ -26,6 +27,7 @@ namespace HackCovidAPICore
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+			services.AddSingleton(typeof(ICosmosDBService), typeof(CosmosDBService));
 			services.AddCors();
 		}
 
@@ -44,6 +46,7 @@ namespace HackCovidAPICore
 
 			//app.UseHttpsRedirection();
 			app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+			app.UseAuthentication();
 			app.UseMvc();
 		}
 	}
