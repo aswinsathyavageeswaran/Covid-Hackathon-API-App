@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Collections.Generic;
+using System.Web.Http;
 using System.Web.Http.Cors;
 using HackCovidAPI.Models;
 using HackCovidAPI.Services;
@@ -40,6 +41,13 @@ namespace HackCovidAPI.Controllers
 		public int UpdateUser(ShopModel shopData)
 		{
 			return DBService.UpdateProfile(shopData);
+		}
+
+		[HttpGet]
+		[Route("covid/shop/GetNearByShops")]
+		public List<ShopModel> GetNearByShops(double latitude, double longitude)
+		{
+			return DBService.GetNearByShops(latitude, longitude);
 		}
 	}
 }
