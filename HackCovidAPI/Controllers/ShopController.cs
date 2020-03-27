@@ -21,7 +21,7 @@ namespace HackCovidAPI.Controllers
 			return DBService.ChangeShopStatus(shopId, status);
 		}
 
-		[HttpGet]
+		[HttpPost]
 		[Route("covid/shop/LoginUser")]
 		public dynamic LoginUser(string email, string password)
 		{
