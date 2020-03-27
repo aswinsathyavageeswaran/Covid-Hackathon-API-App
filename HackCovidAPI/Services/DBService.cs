@@ -46,44 +46,73 @@ namespace HackCovidAPI.Services
 			return success;
 		}
 
-		public UserModel GetUserData(string email)
-		{
-			var userData = new UserModel();
-
-			var userRec = mongoDBClient.GetCollection<UserModel>("UserData");
-			var builder = Builders<UserModel>.Filter;
-			var filter = builder.Eq("Email", email);// &builder.Eq("Password", password);
+		public ShopModel LoginUser(string email, string password)
+		{			
+			var userRec = mongoDBClient.GetCollection<ShopModel>("ShopInfo");
+			var builder = Builders<ShopModel>.Filter;
+			var filter = builder.Eq("Email", email) & builder.Eq("Password", password);
 			var doc = userRec.Find(filter).FirstOrDefault();
 			if (doc != null)
 			{
-				userData._id = doc._id;
-				userData.UserType = doc.UserType;
-				userData.UserName = doc.UserName;
+				doc.Password = "";
+				doc.ShopId = doc._id.ToString();
 			}
-			return userData;
+			return doc;
 		}
 
-		public int RegisterUser(RegistrationModel registrationDetails)
+		public int RegisterUser(ShopModel shopData)
 		{
 			var success = 0;
-			var userRec = mongoDBClient.GetCollection<UserModel>("UserData");
-			var builder = Builders<UserModel>.Filter;
-			var filter = builder.Eq("Phone", registrationDetails.UserData.Phone);
-			if (userRec.Find(filter).FirstOrDefault() != null)
+			try
 			{
-				success = 1;
-			}
-			else
-			{
-				userRec.InsertOne(registrationDetails.UserData);
-				if (registrationDetails.UserData.UserType == 2)
+				var userRec = mongoDBClient.GetCollection<ShopModel>("ShopInfo");
+				var filter = Builders<ShopModel>.Filter.Eq("Email", shopData.Email);
+				if (userRec.Find(filter).FirstOrDefault() != null)
 				{
-					var insertedRec = userRec.Find(filter).FirstOrDefault();
-					var shopRec = mongoDBClient.GetCollection<ShopModel>("ShopInfo");
-					registrationDetails.ShopData._id = insertedRec._id;
-					registrationDetails.ShopData.Status = 2;
-					shopRec.InsertOne(registrationDetails.ShopData);
+					success = 1; // user with same email already exists
 				}
+				else
+				{
+					shopData.Status = 2; //default to closed
+					userRec.InsertOne(shopData);					
+				}
+			}
+			catch
+			{
+				success = 2; // failure
+			}
+			return success;
+		}
+
+		public int UpdateProfile(ShopModel shopData)
+		{
+			var success = 0;
+			try
+			{
+				var userRec = mongoDBClient.GetCollection<ShopModel>("ShopInfo");
+				var filter = Builders<ShopModel>.Filter.Eq("_id", new ObjectId(shopData.ShopId));
+				var updateRec = userRec.Find(filter).FirstOrDefault();
+				if (updateRec != null)
+				{
+					var update = Builders<ShopModel>.Update.
+						Set("UserName", shopData.UserName).
+						Set("ShopName", shopData.ShopName).
+						Set("TypeOfBusiness", shopData.TypeOfBusiness).
+						Set("DeliveryNumber", shopData.DeliveryNumber).
+						Set("WorkingHours", shopData.WorkingHours).
+						Set("Email", shopData.Email).
+						Set("Phone", shopData.Phone).
+						Set("Address", shopData.Address);
+					userRec.UpdateOne(filter, update);					
+				}
+				else
+				{
+					success = 1; // user not found
+				}
+			}
+			catch
+			{
+				success = 2; //failure
 			}
 			return success;
 		}

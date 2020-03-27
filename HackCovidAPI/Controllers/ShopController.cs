@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using System.Web.Http.Cors;
+using HackCovidAPI.Models;
 using HackCovidAPI.Services;
 
 namespace HackCovidAPI.Controllers
@@ -18,6 +19,27 @@ namespace HackCovidAPI.Controllers
 		public bool ChangeShopStatus(string shopId, int status)
 		{
 			return DBService.ChangeShopStatus(shopId, status);
+		}
+
+		[HttpGet]
+		[Route("covid/shop/LoginUser")]
+		public dynamic LoginUser(string email, string password)
+		{
+			return DBService.LoginUser(email, password);
+		}
+
+		[HttpPost]
+		[Route("covid/shop/RegisterUser")]
+		public int RegisterUser(ShopModel shopData)
+		{
+			return DBService.RegisterUser(shopData);
+		}
+
+		[HttpPost]
+		[Route("covid/shop/UpdateProfile")]
+		public int UpdateUser(ShopModel shopData)
+		{
+			return DBService.UpdateProfile(shopData);
 		}
 	}
 }

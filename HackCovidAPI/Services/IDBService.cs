@@ -7,7 +7,8 @@ namespace HackCovidAPI.Services
 	{
 		List<BusinessType> GetBussinessTypeCollection();
 		bool ChangeShopStatus(string shopId, int status);
-		UserModel GetUserData(string email);
-		int RegisterUser(RegistrationModel registrationDetails);
+		ShopModel LoginUser(string email, string password);
+		int RegisterUser(ShopModel shopData);
+		int UpdateProfile(ShopModel shopData);
 	}
 }
