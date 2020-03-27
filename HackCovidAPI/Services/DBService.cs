@@ -1,4 +1,5 @@
 ﻿using HackCovidAPI.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Configuration;
@@ -30,13 +31,13 @@ namespace HackCovidAPI.Services
 			return businessList;
 		}
 
-		public bool ChangeShopStatus(int shopId, int status)
+		public bool ChangeShopStatus(string shopId, int status)
 		{
 			var success = false;
 			try
 			{
 				var shopRec = mongoDBClient.GetCollection<ShopModel>("ShopInfo");
-				var filter = Builders<ShopModel>.Filter.Eq("ShopId", shopId);
+				var filter = Builders<ShopModel>.Filter.Eq("_id", new ObjectId(shopId));
 				var update = Builders<ShopModel>.Update.Set("Status", status);
 				shopRec.UpdateOne(filter, update);
 				success = true;
@@ -55,12 +56,36 @@ namespace HackCovidAPI.Services
 			var doc = userRec.Find(filter).FirstOrDefault();
 			if (doc != null)
 			{
-				userData.UserId = doc.UserId;
+				userData._id = doc._id;
 				userData.UserType = doc.UserType;
 				userData.UserName = doc.UserName;
 			}
 			return userData;
 		}
 
+		public int RegisterUser(RegistrationModel registrationDetails)
+		{
+			var success = 0;
+			var userRec = mongoDBClient.GetCollection<UserModel>("UserData");
+			var builder = Builders<UserModel>.Filter;
+			var filter = builder.Eq("Phone", registrationDetails.UserData.Phone);
+			if (userRec.Find(filter).FirstOrDefault() != null)
+			{
+				success = 1;
+			}
+			else
+			{
+				userRec.InsertOne(registrationDetails.UserData);
+				if (registrationDetails.UserData.UserType == 2)
+				{
+					var insertedRec = userRec.Find(filter).FirstOrDefault();
+					var shopRec = mongoDBClient.GetCollection<ShopModel>("ShopInfo");
+					registrationDetails.ShopData._id = insertedRec._id;
+					registrationDetails.ShopData.Status = 2;
+					shopRec.InsertOne(registrationDetails.ShopData);
+				}
+			}
+			return success;
+		}
 	}
 }

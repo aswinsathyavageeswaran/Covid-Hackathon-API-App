@@ -1,11 +1,11 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using System;
 
 namespace HackCovidAPI.Models
 {
 	public class UserModel
     {
-        public object _id { get; set; }
-        public int UserId { get; set; }
+        public ObjectId _id { get; set; }
         public int UserType { get; set; }
         public string UserName { get; set; }
         public DateTime DateOfBirth { get; set; }

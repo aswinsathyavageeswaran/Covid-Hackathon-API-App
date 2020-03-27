@@ -6,7 +6,8 @@ namespace HackCovidAPI.Services
 	public interface IDBService
 	{
 		List<BusinessType> GetBussinessTypeCollection();
-		bool ChangeShopStatus(int shopId, int status);
+		bool ChangeShopStatus(string shopId, int status);
 		UserModel GetUserData(string email);
+		int RegisterUser(RegistrationModel registrationDetails);
 	}
 }

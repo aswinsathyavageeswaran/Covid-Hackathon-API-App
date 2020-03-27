@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using System.Web.Http.Cors;
+using HackCovidAPI.Models;
 using HackCovidAPI.Services;
 
 namespace HackCovidAPI.Controllers
@@ -18,6 +19,13 @@ namespace HackCovidAPI.Controllers
 		public dynamic GetUserData(string email)
 		{
 			return DBService.GetUserData(email);
+		}
+
+		[HttpPost]
+		[Route("covid/user/RegisterUser")]
+		public int RegisterUser(RegistrationModel registrationDetails)
+		{
+			return DBService.RegisterUser(registrationDetails);
 		}
 	}
 }

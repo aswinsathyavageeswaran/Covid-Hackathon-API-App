@@ -15,7 +15,7 @@ namespace HackCovidAPI.Controllers
 
 		[HttpPost]
 		[Route("covid/shop/ChangeShopStatus")]
-		public bool ChangeShopStatus(int shopId, int status)
+		public bool ChangeShopStatus(string shopId, int status)
 		{
 			return DBService.ChangeShopStatus(shopId, status);
 		}
