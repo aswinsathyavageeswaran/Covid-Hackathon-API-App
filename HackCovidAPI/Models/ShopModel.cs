@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using MongoDB.Driver;
 
-namespace FaceRecognitionAPI.Models
+namespace HackCovidAPI.Models
 {
     public class ShopModel
     {

@@ -1,4 +1,4 @@
-﻿using FaceRecognitionAPI.Models;
+﻿using HackCovidAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
