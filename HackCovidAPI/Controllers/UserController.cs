@@ -1,27 +1,23 @@
-﻿using HackCovidAPI.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Http.Cors;
+using HackCovidAPI.Services;
 
 namespace HackCovidAPI.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class UserController : ApiController
-    {
-        UserDataContext userDataContext;
-        public UserController()
-        {
-            userDataContext = new UserDataContext();
-        }
+	[EnableCors(origins: "*", headers: "*", methods: "*")]
+	public class UserController : ApiController
+	{
+		private IDBService DBService;
+		public UserController(IDBService IDBService)
+		{
+			DBService = IDBService;
+		}
 
-        [HttpGet]
-        [Route("covid/user/GetUserData")]
-        public UserModel GetUserData(string email)
-        {
-            return userDataContext.GetUserData(email);
-        }
-    }
+		[HttpGet]
+		[Route("covid/user/GetUserData")]
+		public dynamic GetUserData(string email)
+		{
+			return DBService.GetUserData(email);
+		}
+	}
 }
