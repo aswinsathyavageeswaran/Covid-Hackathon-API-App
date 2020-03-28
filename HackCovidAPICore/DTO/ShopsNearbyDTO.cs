@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace HackCovidAPICore.DTO
 {
 	public class ShopsNearbyDTO
 	{
-		public double longitude { get; set; }
-		public double latitude { get; set; }
+		public double Longitude { get; set; }
+		public double Latitude { get; set; }
+
+		[Required]
+		public string TypeOfBusiness { get; set; }
 	}
 }

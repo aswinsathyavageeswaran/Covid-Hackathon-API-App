@@ -8,7 +8,6 @@ using System.Text;
 using Microsoft.Azure.Documents.Linq;
 using System.Collections.Generic;
 using System.Device.Location;
-using Microsoft.Azure.Cosmos.Spatial;
 
 namespace HackCovidAPICore.DataAccess
 {
@@ -106,7 +105,7 @@ namespace HackCovidAPICore.DataAccess
 		}
 
 		//Pending to add async
-		public List<ShopModel> GetShopsNearby(double longitude, double latitude)
+		public List<ShopModel> GetShopsNearby(double longitude, double latitude, string businessType)
 		{
 			try
 			{
@@ -114,7 +113,7 @@ namespace HackCovidAPICore.DataAccess
 				//						.Where(x => x.Location.Distance(new Point(longitude, latitude)) < 10000).AsDocumentQuery();
 
 				var coord = new GeoCoordinate(latitude, longitude);
-				List<ShopModel> shopList = client.CreateDocumentQuery<ShopModel>(collectionLink, new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true }).AsEnumerable().ToList();
+				List<ShopModel> shopList = client.CreateDocumentQuery<ShopModel>(collectionLink, new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true }).Where(x=>x.TypeOfBusiness == businessType).AsEnumerable().ToList();
 				shopList.ForEach(x =>
 				{
 					x.Distance = Math.Round((new GeoCoordinate(x.Location.Position.Latitude, x.Location.Position.Longitude).GetDistanceTo(coord)) / 500, 2);

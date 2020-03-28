@@ -1,6 +1,7 @@
 ﻿using HackCovidAPICore.DataAccess;
 using HackCovidAPICore.DTO;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HackCovidAPICore.Controllers
@@ -10,9 +11,20 @@ namespace HackCovidAPICore.Controllers
 	public class ShopController : ControllerBase
 	{
 		private ICosmosDBService cosmosDBService;
+		private List<string> businessTypes;
 		public ShopController(ICosmosDBService _cosmosDBService)
 		{
 			cosmosDBService = _cosmosDBService;
+
+			businessTypes = new List<string>();
+			businessTypes.Add("Medical");
+			businessTypes.Add("Hotel");
+			businessTypes.Add("Shop");
+			businessTypes.Add("Petrol Pump");
+			businessTypes.Add("Hospital");
+			businessTypes.Add("Food Depot");
+			businessTypes.Add("Bank");
+			businessTypes.Add("Govt. Office");
 		}
 
 		[HttpPost("changeshopstatus")]
@@ -28,10 +40,17 @@ namespace HackCovidAPICore.Controllers
 		{
 			try
 			{
-				return Ok(cosmosDBService.GetShopsNearby(shopsNearbyDTO.longitude, shopsNearbyDTO.latitude));
+				return Ok(cosmosDBService.GetShopsNearby(shopsNearbyDTO.Longitude, shopsNearbyDTO.Latitude, shopsNearbyDTO.TypeOfBusiness));
 			}
 			catch { }
 			return BadRequest("Unable to find any Shops Nearby");
 		}
+
+		[HttpGet("getbusinesstypes")]
+		public ActionResult GetBusinessTypes()
+		{
+			return Ok(businessTypes);
+		}
+
 	}
 }
