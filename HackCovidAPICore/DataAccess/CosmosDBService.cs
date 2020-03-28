@@ -105,7 +105,7 @@ namespace HackCovidAPICore.DataAccess
 		}
 
 		//Pending to add async
-		public List<ShopModel> GetShopsNearby(double longitude, double latitude, string businessType)
+		public List<ShopModel> GetShopsNearby(double longitude, double latitude, int businessType)
 		{
 			try
 			{
