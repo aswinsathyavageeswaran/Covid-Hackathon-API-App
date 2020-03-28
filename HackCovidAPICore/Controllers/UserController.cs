@@ -33,6 +33,7 @@ namespace HackCovidAPICore.Controllers
 			shopModel.DeliveryNumber = registerDto.DeliveryNumber;
 			shopModel.StartTime = registerDto.StartTime;
 			shopModel.StopTime = registerDto.StopTime;
+			shopModel.Address = registerDto.Address;
 
 
 			//await teamDataAccess.Register(registerDto.UserName.ToLower(), registerDto.Password);

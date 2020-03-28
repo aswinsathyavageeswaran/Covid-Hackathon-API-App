@@ -36,5 +36,7 @@ namespace HackCovidAPICore.DTO
 
 		[Required]
 		public DateTime StopTime { get; set; }
+
+		public string Address { get; set; }
 	}
 }

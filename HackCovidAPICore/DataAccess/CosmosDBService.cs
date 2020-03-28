@@ -116,7 +116,7 @@ namespace HackCovidAPICore.DataAccess
 				List<ShopModel> shopList = client.CreateDocumentQuery<ShopModel>(collectionLink, new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true }).Where(x=>x.TypeOfBusiness == businessType).AsEnumerable().ToList();
 				shopList.ForEach(x =>
 				{
-					x.Distance = Math.Round((new GeoCoordinate(x.Location.Position.Latitude, x.Location.Position.Longitude).GetDistanceTo(coord)) / 500, 2);
+					x.Distance = Math.Round((new GeoCoordinate(x.Location.Position.Latitude, x.Location.Position.Longitude).GetDistanceTo(coord)) * 1.60934 / 1000, 2);
 				});
 				List<ShopModel> nearbyShops = shopList.Where(x => x.Distance <10).OrderBy(x => x.Distance).OrderBy(x => x.Status).ToList();
 				return nearbyShops;
