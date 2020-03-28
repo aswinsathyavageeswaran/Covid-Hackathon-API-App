@@ -11,5 +11,6 @@ namespace HackCovidAPICore.DataAccess
 		Task<bool> Login(string userEmail, string password);
 		Task<bool> UpdateShopStatus(string userEmail, int status);
 		List<ShopModel> GetShopsNearby(double longitude, double latitude, string businessType);
+		Task<bool> UpdateProfile(ShopModel schema, string password);
 	}
 }

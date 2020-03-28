@@ -125,6 +125,45 @@ namespace HackCovidAPICore.DataAccess
 			return null;
 		}
 
+		public async Task<bool> UpdateProfile(ShopModel schema, string password)
+		{
+			try
+			{
+				CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+				schema.PasswordHash = passwordHash;
+				schema.PasswordSalt = passwordSalt;
+
+				var query = client.CreateDocumentQuery<ShopModel>(collectionLink, new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
+										.Where(r => r.UserEmail == schema.UserEmail).AsDocumentQuery();
+				if (query.HasMoreResults)
+				{
+					var results = await query.ExecuteNextAsync<ShopModel>();
+					if (results.Any())
+					{
+						ShopModel result = results.ToList().First();
+
+						result.UserEmail = schema.UserEmail;
+						result.ShopName = schema.ShopName;
+						result.FirstName = schema.FirstName;
+						result.LastName = schema.LastName;
+						result.TypeOfBusiness = schema.TypeOfBusiness;
+						result.Location = schema.Location;
+						result.DeliveryNumber = schema.DeliveryNumber;
+						result.StartTime = schema.StartTime;
+						result.StopTime = schema.StopTime;
+						result.Address = schema.Address;
+						result.PasswordHash = passwordHash;
+						result.PasswordSalt = passwordSalt;
+
+						await client.ReplaceDocumentAsync(result.SelfLink, result);
+						return true;
+					}
+				}
+			}
+			catch { }//Error Logging
+			return false;
+		}
+
 		private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
 		{
 			using (var hmac = new HMACSHA512())
