@@ -8,6 +8,6 @@ namespace HackCovidAPICore.DTO
 		public double Latitude { get; set; }
 
 		[Required]
-		public string TypeOfBusiness { get; set; }
+		public int TypeOfBusiness { get; set; }
 	}
 }

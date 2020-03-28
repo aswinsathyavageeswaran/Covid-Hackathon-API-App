@@ -10,6 +10,6 @@ namespace HackCovidAPICore.DataAccess
 		Task<bool> UserExists(string userEmail);
 		Task<bool> Login(string userEmail, string password);
 		Task<bool> UpdateShopStatus(string userEmail, int status);
-		List<ShopModel> GetShopsNearby(double longitude, double latitude, string businessType);
+		List<ShopModel> GetShopsNearby(double longitude, double latitude, int businessType);
 	}
 }

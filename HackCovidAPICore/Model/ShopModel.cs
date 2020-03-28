@@ -22,7 +22,7 @@ namespace HackCovidAPICore.Model
 		public string LastName { get; set; }
 
 		[JsonProperty(PropertyName = "TypeOfBusiness")]
-		public string TypeOfBusiness { get; set; }
+		public int TypeOfBusiness { get; set; }
 
 		[JsonProperty(PropertyName = "Location")]
 		public Point Location { get; set; }

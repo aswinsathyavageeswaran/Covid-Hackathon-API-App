@@ -1,5 +1,6 @@
 ﻿using HackCovidAPICore.DataAccess;
 using HackCovidAPICore.DTO;
+using HackCovidAPICore.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,20 +12,20 @@ namespace HackCovidAPICore.Controllers
 	public class ShopController : ControllerBase
 	{
 		private ICosmosDBService cosmosDBService;
-		private List<string> businessTypes;
+		private List<BusinessTypeModel> businessTypes;
 		public ShopController(ICosmosDBService _cosmosDBService)
 		{
 			cosmosDBService = _cosmosDBService;
 
-			businessTypes = new List<string>();
-			businessTypes.Add("Medical");
-			businessTypes.Add("Hotel");
-			businessTypes.Add("Shop");
-			businessTypes.Add("Petrol Pump");
-			businessTypes.Add("Hospital");
-			businessTypes.Add("Food Depot");
-			businessTypes.Add("Bank");
-			businessTypes.Add("Govt. Office");
+			businessTypes = new List<BusinessTypeModel>();
+			businessTypes.Add(new BusinessTypeModel { TypeId = 1, Description = "Medical" });
+			businessTypes.Add(new BusinessTypeModel { TypeId = 2, Description = "Hotel" });
+			businessTypes.Add(new BusinessTypeModel { TypeId = 3, Description = "Shop" });
+			businessTypes.Add(new BusinessTypeModel { TypeId = 4, Description = "Petrol Pump" });
+			businessTypes.Add(new BusinessTypeModel { TypeId = 5, Description = "Hospital" });
+			businessTypes.Add(new BusinessTypeModel { TypeId = 6, Description = "Food Depot" });
+			businessTypes.Add(new BusinessTypeModel { TypeId = 7, Description = "Bank" });
+			businessTypes.Add(new BusinessTypeModel { TypeId = 8, Description = "Govt. Office" });
 		}
 
 		[HttpPost("changeshopstatus")]
