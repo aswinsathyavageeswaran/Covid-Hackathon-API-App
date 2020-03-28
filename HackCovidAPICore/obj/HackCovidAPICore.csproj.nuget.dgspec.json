@@ -69,6 +69,10 @@
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[2.2.4, )"
+            },
+            "System.Device.Location.Portable": {
+              "target": "Package",
+              "version": "[1.0.0, )"
             }
           },
           "imports": [

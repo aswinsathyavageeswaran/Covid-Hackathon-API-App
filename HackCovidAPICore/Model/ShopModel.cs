@@ -50,5 +50,8 @@ namespace HackCovidAPICore.Model
 
 		[JsonProperty(PropertyName = "PasswordHash")]
 		public byte[] PasswordHash { get; set; }
+
+		[JsonProperty(PropertyName = "Distance")]
+		public double Distance { get; set; }
 	}
 }

@@ -14,3 +14,4 @@ C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Debug\netcoreapp2.
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Debug\netcoreapp2.2\Microsoft.Azure.Documents.ServiceInterop.dll
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Debug\netcoreapp2.2\Cosmos.CRTCompat.dll
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Debug\netcoreapp2.2\Microsoft.Azure.Cosmos.ServiceInterop.dll
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Debug\netcoreapp2.2\HackCovidAPICore.csprojAssemblyReference.cache

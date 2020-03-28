@@ -22,5 +22,16 @@ namespace HackCovidAPICore.Controllers
 				return Ok("Successfully Updated the Shop Status");
 			return BadRequest("Something went Wrong!");
 		}
+
+		[HttpGet("shopsnearby")]
+		public ActionResult GetNearbyShops(ShopsNearbyDTO shopsNearbyDTO)
+		{
+			try
+			{
+				return Ok(cosmosDBService.GetShopsNearby(shopsNearbyDTO.longitude, shopsNearbyDTO.latitude));
+			}
+			catch { }
+			return BadRequest("Unable to find any Shops Nearby");
+		}
 	}
 }
