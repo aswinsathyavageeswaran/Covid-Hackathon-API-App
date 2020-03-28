@@ -1,0 +1,17 @@
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Release\netcoreapp2.2\Microsoft.Azure.Documents.ServiceInterop.dll
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Release\netcoreapp2.2\Cosmos.CRTCompat.dll
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Release\netcoreapp2.2\Microsoft.Azure.Cosmos.ServiceInterop.dll
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Release\netcoreapp2.2\HackCovidAPICore.deps.json
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Release\netcoreapp2.2\HackCovidAPICore.runtimeconfig.json
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Release\netcoreapp2.2\HackCovidAPICore.runtimeconfig.dev.json
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Release\netcoreapp2.2\HackCovidAPICore.dll
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Release\netcoreapp2.2\HackCovidAPICore.pdb
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.csprojAssemblyReference.cache
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.csproj.CoreCompileInputs.cache
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.RazorAssemblyInfo.cache
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.RazorAssemblyInfo.cs
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.AssemblyInfoInputs.cache
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.AssemblyInfo.cs
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.RazorTargetAssemblyInfo.cache
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.dll
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.pdb

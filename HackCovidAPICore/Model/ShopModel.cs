@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using Microsoft.Azure.Cosmos.Spatial;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HackCovidAPICore.Model
 {

@@ -19,7 +19,6 @@ namespace HackCovidAPICore.Controllers
 		[HttpPost("register")]
 		public async Task<ActionResult> Register(UserForRegisterDTO registerDto)
 		{
-			//Incomplete
 			if (await cosmosDBService.UserExists(registerDto.UserEmail))
 				return BadRequest("Username already exists");
 
@@ -37,8 +36,9 @@ namespace HackCovidAPICore.Controllers
 
 
 			//await teamDataAccess.Register(registerDto.UserName.ToLower(), registerDto.Password);
-			await cosmosDBService.Register(shopModel, registerDto.Password);
-			return Ok("Successfully registered the user");
+			if (await cosmosDBService.Register(shopModel, registerDto.Password))
+				return Ok("Successfully registered the user");
+			return BadRequest("Something Went Wrong!");
 
 		}
 

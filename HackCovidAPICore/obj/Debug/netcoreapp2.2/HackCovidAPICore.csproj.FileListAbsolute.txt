@@ -3,7 +3,6 @@ C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Debug\netcoreapp2.
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Debug\netcoreapp2.2\HackCovidAPICore.runtimeconfig.dev.json
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Debug\netcoreapp2.2\HackCovidAPICore.dll
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Debug\netcoreapp2.2\HackCovidAPICore.pdb
-C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Debug\netcoreapp2.2\HackCovidAPICore.csprojAssemblyReference.cache
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Debug\netcoreapp2.2\HackCovidAPICore.csproj.CoreCompileInputs.cache
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Debug\netcoreapp2.2\HackCovidAPICore.RazorAssemblyInfo.cache
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Debug\netcoreapp2.2\HackCovidAPICore.RazorAssemblyInfo.cs
