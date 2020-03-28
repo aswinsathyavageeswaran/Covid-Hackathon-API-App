@@ -6,6 +6,7 @@ namespace HackCovidAPICore.DataAccess
 	public interface ICosmosDBService
 	{
 		Task<bool> Register(ShopModel schema, string password);
-		bool UserExists(string userEmail);
+		Task<bool> UserExists(string userEmail);
+		Task<bool> Login(string userEmail, string password);
 	}
 }

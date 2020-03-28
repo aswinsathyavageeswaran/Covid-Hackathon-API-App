@@ -7,14 +7,16 @@ using Microsoft.Azure.Documents.Client;
 using HackCovidAPICore.Model;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Azure.Documents.Linq;
 
 namespace HackCovidAPICore.DataAccess
 {
-	public class CosmosDBService :ICosmosDBService
+	public class CosmosDBService : ICosmosDBService
 	{
 		private readonly string endPointUrl = "https://covidcosmosdb.documents.azure.com:443/";
 		private readonly string primaryKey = "jSSmUe7Q6roHGd8j42YhVCkH9or3lP1rM2IKbkIocWF0NDLlrzp4TQaOldRHYwky9l23nAL6nSiRyULP6000kQ==";
 		private readonly string collectionLink = "dbs/S5EfAA==/colls/S5EfAJd6FqA=";
+
 		private DocumentClient client;
 
 		public CosmosDBService()
@@ -35,12 +37,46 @@ namespace HackCovidAPICore.DataAccess
 				schema.PasswordSalt = passwordSalt;
 				Document document = await client.CreateDocumentAsync(collectionLink, schema, null, false);
 			}
-			catch { }
+			catch { }//Error Logging
 			return true;
 		}
 
-		public bool UserExists(string userEmail)
+		public async Task<bool> UserExists(string userEmail)
 		{
+			try
+			{
+				var query = client.CreateDocumentQuery<ShopModel>(collectionLink, new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
+										.Where(r => r.UserEmail == userEmail).AsDocumentQuery();
+				if (query.HasMoreResults)
+				{
+					var results = await query.ExecuteNextAsync<ShopModel>();
+					if (results.Any())
+					{
+						return true;
+					}
+				}
+			}
+			catch { }
+			return false;
+		}
+
+		public async Task<bool> Login(string userEmail, string password)
+		{
+			try
+			{
+				var query = client.CreateDocumentQuery<ShopModel>(collectionLink, new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
+										.Where(r => r.UserEmail == userEmail).AsDocumentQuery();
+				if (query.HasMoreResults)
+				{
+					var results = await query.ExecuteNextAsync<ShopModel>();
+					if (results.Any())
+					{
+						ShopModel shopModel = results.ToList().First();
+						return VerifyPasswordHash(password, shopModel);
+					}
+				}
+			}
+			catch { }
 			return false;
 		}
 
@@ -58,6 +94,26 @@ namespace HackCovidAPICore.DataAccess
 				passwordSalt = hmac.Key;
 				passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 			}
+		}
+
+		/// <summary>
+		/// Verify Password with Salt and Hash
+		/// </summary>
+		/// <param name="password"></param>
+		/// <param name="user"></param>
+		/// <returns></returns>
+		private bool VerifyPasswordHash(string password, ShopModel shopModel)
+		{
+			using (var hmac = new HMACSHA512(shopModel.PasswordSalt))
+			{
+				var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+				for (int i = 0; i < computedHash.Length; i++)
+				{
+					if (computedHash[i] != shopModel.PasswordHash[i])
+						return false;
+				}
+			}
+			return true;
 		}
 	}
 }

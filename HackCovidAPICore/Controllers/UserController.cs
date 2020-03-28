@@ -13,16 +13,17 @@ namespace HackCovidAPICore.Controllers
 		private ICosmosDBService cosmosDBService;
 		public UserController(ICosmosDBService _cosmosDBService)
 		{
-			cosmosDBService = _cosmosDBService;	
+			cosmosDBService = _cosmosDBService;
 		}
 
 		[HttpPost("register")]
 		public async Task<ActionResult> Register(UserForRegisterDTO registerDto)
 		{
-			if (cosmosDBService.UserExists(registerDto.UserEmail))
+			//Incomplete
+			if (await cosmosDBService.UserExists(registerDto.UserEmail))
 				return BadRequest("Username already exists");
 
-			//Serialization
+			//Should be done in DataAccess Layer
 			ShopModel shopModel = new ShopModel();
 			shopModel.UserEmail = registerDto.UserEmail;
 			shopModel.ShopName = registerDto.ShopName;
@@ -41,10 +42,12 @@ namespace HackCovidAPICore.Controllers
 
 		}
 
-		[HttpGet("login")]
-		public ActionResult Login()
+		[HttpPost("login")]
+		public async Task<ActionResult> Login(UserLoginDTO user)
 		{
-			return Ok("working");
+			if (await cosmosDBService.Login(user.UserEmail, user.Password))
+				return Ok("User Log In Successful");
+			return Unauthorized("UserName and Password Combination is incorrect");
 		}
 
 	}
