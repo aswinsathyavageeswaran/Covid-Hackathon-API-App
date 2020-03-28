@@ -36,7 +36,7 @@ namespace HackCovidAPICore.Controllers
 			return BadRequest("Something went Wrong!");
 		}
 
-		[HttpGet("shopsnearby")]
+		[HttpPost("shopsnearby")]
 		public ActionResult GetNearbyShops(ShopsNearbyDTO shopsNearbyDTO)
 		{
 			try

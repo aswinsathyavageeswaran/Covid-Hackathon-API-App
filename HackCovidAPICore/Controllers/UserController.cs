@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using HackCovidAPICore.DTO;
 using HackCovidAPICore.DataAccess;
 using HackCovidAPICore.Model;
+using System.Collections.Generic;
 
 namespace HackCovidAPICore.Controllers
 {
@@ -46,9 +47,7 @@ namespace HackCovidAPICore.Controllers
 		[HttpPost("login")]
 		public async Task<ActionResult> Login(UserLoginDTO user)
 		{
-			if (await cosmosDBService.Login(user.UserEmail, user.Password))
-				return Ok("User Log In Successful");
-			return Unauthorized("UserName and Password Combination is incorrect");
+			return Ok(await cosmosDBService.Login(user.UserEmail, user.Password));
 		}
 
 		[HttpPost("updateprofile")]

@@ -62,7 +62,7 @@ namespace HackCovidAPICore.DataAccess
 			return false;
 		}
 
-		public async Task<bool> Login(string userEmail, string password)
+		public async Task<UserInfo> Login(string userEmail, string password)
 		{
 			try
 			{
@@ -74,12 +74,27 @@ namespace HackCovidAPICore.DataAccess
 					if (results.Any())
 					{
 						ShopModel shopModel = results.ToList().First();
-						return VerifyPasswordHash(password, shopModel);
+						if (VerifyPasswordHash(password, shopModel))
+						{
+							UserInfo userInfo = new UserInfo();
+							userInfo.Address = shopModel.Address;
+							userInfo.DeliveryNumber = shopModel.DeliveryNumber;
+							userInfo.FirstName = shopModel.FirstName;
+							userInfo.LastName = shopModel.LastName;
+							userInfo.Latitude = shopModel.Location.Position.Latitude;
+							userInfo.Longitude = shopModel.Location.Position.Longitude;
+							userInfo.ShopName = shopModel.ShopName;
+							userInfo.StartTime = shopModel.StartTime;
+							userInfo.StopTime = shopModel.StopTime;
+							userInfo.TypeOfBusiness = shopModel.TypeOfBusiness;
+							userInfo.UserEmail = shopModel.UserEmail;
+							return userInfo;
+						}
 					}
 				}
 			}
 			catch { }
-			return false;
+			return null;
 		}
 
 		public async Task<bool> UpdateShopStatus(string userEmail, int status)
@@ -113,15 +128,15 @@ namespace HackCovidAPICore.DataAccess
 				//						.Where(x => x.Location.Distance(new Point(longitude, latitude)) < 10000).AsDocumentQuery();
 
 				var coord = new GeoCoordinate(latitude, longitude);
-				List<ShopModel> shopList = client.CreateDocumentQuery<ShopModel>(collectionLink, new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true }).Where(x=>x.TypeOfBusiness == businessType).AsEnumerable().ToList();
+				List<ShopModel> shopList = client.CreateDocumentQuery<ShopModel>(collectionLink, new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true }).Where(x => x.TypeOfBusiness == businessType).AsEnumerable().ToList();
 				shopList.ForEach(x =>
 				{
 					x.Distance = Math.Round((new GeoCoordinate(x.Location.Position.Latitude, x.Location.Position.Longitude).GetDistanceTo(coord)) * 1.60934 / 1000, 2);
 				});
-				List<ShopModel> nearbyShops = shopList.Where(x => x.Distance <10).OrderBy(x => x.Distance).OrderBy(x => x.Status).ToList();
+				List<ShopModel> nearbyShops = shopList.Where(x => x.Distance < 10).OrderBy(x => x.Distance).OrderBy(x => x.Status).ToList();
 				return nearbyShops;
 			}
-			catch{ }
+			catch { }
 			return null;
 		}
 
@@ -129,10 +144,6 @@ namespace HackCovidAPICore.DataAccess
 		{
 			try
 			{
-				CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-				schema.PasswordHash = passwordHash;
-				schema.PasswordSalt = passwordSalt;
-
 				var query = client.CreateDocumentQuery<ShopModel>(collectionLink, new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
 										.Where(r => r.UserEmail == schema.UserEmail).AsDocumentQuery();
 				if (query.HasMoreResults)
@@ -152,8 +163,13 @@ namespace HackCovidAPICore.DataAccess
 						result.StartTime = schema.StartTime;
 						result.StopTime = schema.StopTime;
 						result.Address = schema.Address;
-						result.PasswordHash = passwordHash;
-						result.PasswordSalt = passwordSalt;
+
+						if (!string.IsNullOrWhiteSpace(password))
+						{
+							CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+							result.PasswordHash = passwordHash;
+							result.PasswordSalt = passwordSalt;
+						}
 
 						await client.ReplaceDocumentAsync(result.SelfLink, result);
 						return true;
