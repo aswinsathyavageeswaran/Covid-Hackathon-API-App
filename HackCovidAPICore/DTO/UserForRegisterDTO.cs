@@ -22,7 +22,7 @@ namespace HackCovidAPICore.DTO
 		public string LastName { get; set; }
 
 		[Required]
-		public string TypeOfBusiness { get; set; }
+		public int TypeOfBusiness { get; set; }
 
 		public double Longitude { get; set; }
 
