@@ -35,6 +35,7 @@ namespace HackCovidAPICore.Controllers
 			shopModel.StartTime = registerDto.StartTime;
 			shopModel.StopTime = registerDto.StopTime;
 			shopModel.Address = registerDto.Address;
+			shopModel.PhoneNumber = registerDto.Phone;
 
 
 			//await teamDataAccess.Register(registerDto.UserName.ToLower(), registerDto.Password);
@@ -65,6 +66,7 @@ namespace HackCovidAPICore.Controllers
 			shopModel.StartTime = registerDto.StartTime;
 			shopModel.StopTime = registerDto.StopTime;
 			shopModel.Address = registerDto.Address;
+			shopModel.PhoneNumber = registerDto.Phone;
 
 
 			//await teamDataAccess.Register(registerDto.UserName.ToLower(), registerDto.Password);

@@ -30,6 +30,9 @@ namespace HackCovidAPICore.Model
 		[JsonProperty(PropertyName = "Status")]
 		public int Status { get; set; }
 
+		[JsonProperty(PropertyName = "PhoneNumber")]
+		public string PhoneNumber { get; set; }
+
 		[JsonProperty(PropertyName = "DeliveryNumber")]
 		public string DeliveryNumber { get; set; }
 
@@ -77,6 +80,9 @@ namespace HackCovidAPICore.Model
 
 		[JsonProperty(PropertyName = "DeliveryNumber")]
 		public string DeliveryNumber { get; set; }
+
+		[JsonProperty(PropertyName = "Phone")]
+		public string Phone { get; set; }
 
 		[JsonProperty(PropertyName = "StartTime")]
 		public DateTime StartTime { get; set; }

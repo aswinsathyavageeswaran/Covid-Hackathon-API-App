@@ -29,6 +29,9 @@ namespace HackCovidAPICore.DTO
 		public double Latitude { get; set; }
 
 		[Phone]
+		public string Phone { get; set; }
+
+		[Phone]
 		public string DeliveryNumber { get; set; }
 
 		[Required]

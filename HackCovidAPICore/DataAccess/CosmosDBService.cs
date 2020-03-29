@@ -88,6 +88,7 @@ namespace HackCovidAPICore.DataAccess
 							userInfo.StopTime = shopModel.StopTime;
 							userInfo.TypeOfBusiness = shopModel.TypeOfBusiness;
 							userInfo.UserEmail = shopModel.UserEmail;
+							userInfo.Phone = shopModel.PhoneNumber;
 							return userInfo;
 						}
 					}
@@ -163,6 +164,7 @@ namespace HackCovidAPICore.DataAccess
 						result.StartTime = schema.StartTime;
 						result.StopTime = schema.StopTime;
 						result.Address = schema.Address;
+						result.PhoneNumber = schema.PhoneNumber;
 
 						if (!string.IsNullOrWhiteSpace(password))
 						{
