@@ -52,25 +52,25 @@ namespace HackCovidAPICore.Controllers
 		}
 
 		[HttpPost("updateprofile")]
-		public async Task<ActionResult> UpdateProfile(UserForRegisterDTO registerDto)
+		public async Task<ActionResult> UpdateProfile(UpdateProfileDTO updateProfileDTO)
 		{
 			//Should be done in DataAccess Layer
 			ShopModel shopModel = new ShopModel();
-			shopModel.UserEmail = registerDto.UserEmail;
-			shopModel.ShopName = registerDto.ShopName;
-			shopModel.FirstName = registerDto.FirstName;
-			shopModel.LastName = registerDto.LastName;
-			shopModel.TypeOfBusiness = registerDto.TypeOfBusiness;
-			shopModel.Location = new Microsoft.Azure.Cosmos.Spatial.Point(registerDto.Longitude, registerDto.Latitude);
-			shopModel.DeliveryNumber = registerDto.DeliveryNumber;
-			shopModel.StartTime = registerDto.StartTime;
-			shopModel.StopTime = registerDto.StopTime;
-			shopModel.Address = registerDto.Address;
-			shopModel.PhoneNumber = registerDto.Phone;
+			shopModel.UserEmail = updateProfileDTO.UserEmail;
+			shopModel.ShopName = updateProfileDTO.ShopName;
+			shopModel.FirstName = updateProfileDTO.FirstName;
+			shopModel.LastName = updateProfileDTO.LastName;
+			shopModel.TypeOfBusiness = updateProfileDTO.TypeOfBusiness;
+			shopModel.Location = new Microsoft.Azure.Cosmos.Spatial.Point(updateProfileDTO.Longitude, updateProfileDTO.Latitude);
+			shopModel.DeliveryNumber = updateProfileDTO.DeliveryNumber;
+			shopModel.StartTime = updateProfileDTO.StartTime;
+			shopModel.StopTime = updateProfileDTO.StopTime;
+			shopModel.Address = updateProfileDTO.Address;
+			shopModel.PhoneNumber = updateProfileDTO.Phone;
 
 
 			//await teamDataAccess.Register(registerDto.UserName.ToLower(), registerDto.Password);
-			if (await cosmosDBService.UpdateProfile(shopModel, registerDto.Password))
+			if (await cosmosDBService.UpdateProfile(shopModel, updateProfileDTO.Password))
 				return Ok("Successfully updated the profile of the user");
 			return BadRequest("Something Went Wrong!");
 

@@ -18,14 +18,12 @@ namespace HackCovidAPICore.Controllers
 			cosmosDBService = _cosmosDBService;
 
 			businessTypes = new List<BusinessTypeModel>();
-			businessTypes.Add(new BusinessTypeModel { TypeId = 1, Description = "Medical" });
-			businessTypes.Add(new BusinessTypeModel { TypeId = 2, Description = "Hotel" });
-			businessTypes.Add(new BusinessTypeModel { TypeId = 3, Description = "Shop" });
-			businessTypes.Add(new BusinessTypeModel { TypeId = 4, Description = "Petrol Pump" });
-			businessTypes.Add(new BusinessTypeModel { TypeId = 5, Description = "Hospital" });
-			businessTypes.Add(new BusinessTypeModel { TypeId = 6, Description = "Food Depot" });
-			businessTypes.Add(new BusinessTypeModel { TypeId = 7, Description = "Bank" });
-			businessTypes.Add(new BusinessTypeModel { TypeId = 8, Description = "Govt. Office" });
+			businessTypes.Add(new BusinessTypeModel { TypeId = 1, Description = "Medical / Pharmacy" });
+			businessTypes.Add(new BusinessTypeModel { TypeId = 2, Description = "Groceries / Provision Stores" });
+			businessTypes.Add(new BusinessTypeModel { TypeId = 3, Description = "Govt. Covid Help Centers / Hospitals" });
+			businessTypes.Add(new BusinessTypeModel { TypeId = 4, Description = "Vegetables / Fruits" });
+			businessTypes.Add(new BusinessTypeModel { TypeId = 5, Description = "Petrol Pumps" });
+			businessTypes.Add(new BusinessTypeModel { TypeId = 6, Description = "Meat / Diary Products" });
 		}
 
 		[HttpPost("changeshopstatus")]

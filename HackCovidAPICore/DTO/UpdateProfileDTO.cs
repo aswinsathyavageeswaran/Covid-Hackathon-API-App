@@ -3,13 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HackCovidAPICore.DTO
 {
-	public class UserForRegisterDTO
+	public class UpdateProfileDTO
 	{
 		[Required]
 		[EmailAddress]
 		public string UserEmail { get; set; }
 
-		[Required]
 		public string Password { get; set; }
 
 		[Required]
