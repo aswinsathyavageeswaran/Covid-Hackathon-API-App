@@ -78,6 +78,9 @@ namespace HackCovidAPICore.Model
 		[JsonProperty(PropertyName = "Latitude")]
 		public double Latitude { get; set; }
 
+		[JsonProperty(PropertyName = "Status")]
+		public int Status { get; set; }
+
 		[JsonProperty(PropertyName = "DeliveryNumber")]
 		public string DeliveryNumber { get; set; }
 

@@ -89,6 +89,7 @@ namespace HackCovidAPICore.DataAccess
 							userInfo.TypeOfBusiness = shopModel.TypeOfBusiness;
 							userInfo.UserEmail = shopModel.UserEmail;
 							userInfo.Phone = shopModel.PhoneNumber;
+							userInfo.Status = shopModel.Status;
 							return userInfo;
 						}
 					}
