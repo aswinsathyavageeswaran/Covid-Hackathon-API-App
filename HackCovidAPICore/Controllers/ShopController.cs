@@ -12,11 +12,12 @@ namespace HackCovidAPICore.Controllers
 	public class ShopController : ControllerBase
 	{
 		private ICosmosDBService cosmosDBService;
+		private IPushNotificationService pushNotificationService;
 		private List<BusinessTypeModel> businessTypes;
-		public ShopController(ICosmosDBService _cosmosDBService)
+		public ShopController(ICosmosDBService _cosmosDBService, IPushNotificationService _pushNotificationService)
 		{
 			cosmosDBService = _cosmosDBService;
-
+			pushNotificationService = _pushNotificationService;
 			businessTypes = new List<BusinessTypeModel>();
 			businessTypes.Add(new BusinessTypeModel { TypeId = 1, Description = "Medical / Pharmacy" });
 			businessTypes.Add(new BusinessTypeModel { TypeId = 2, Description = "Groceries / Provision Stores" });
@@ -48,7 +49,8 @@ namespace HackCovidAPICore.Controllers
 		[HttpGet("getbusinesstypes")]
 		public ActionResult GetBusinessTypes()
 		{
-			return Ok(businessTypes);
+			return Ok(pushNotificationService.SendNotification("", "", ""));
+			//return Ok(businessTypes);
 		}
 
 	}

@@ -21,6 +21,7 @@ namespace HackCovidAPICore
 		{
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 			services.AddSingleton(typeof(ICosmosDBService), typeof(CosmosDBService));
+			services.AddSingleton(typeof(IPushNotificationService), typeof(PushNotificationService));
 			services.AddCors();
 		}
 
