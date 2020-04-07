@@ -48,9 +48,8 @@ namespace HackCovidAPICore.Controllers
 
 		[HttpGet("getbusinesstypes")]
 		public ActionResult GetBusinessTypes()
-		{
-			return Ok(pushNotificationService.SendNotification("", "", ""));
-			//return Ok(businessTypes);
+		{			
+			return Ok(businessTypes);
 		}
 
 	}
