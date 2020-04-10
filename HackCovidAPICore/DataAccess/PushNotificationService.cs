@@ -1,13 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace HackCovidAPICore.DataAccess
 {
-    public class PushNotificationService : IPushNotificationService
+	public class PushNotificationService : IPushNotificationService
     {
         private readonly string endPointUrl = "https://testapp-2b0a4.web.app/api/v1/sendNotification?";
         private HttpClient client;

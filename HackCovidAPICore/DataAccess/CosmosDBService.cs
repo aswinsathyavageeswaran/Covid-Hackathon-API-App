@@ -8,6 +8,9 @@ using System.Text;
 using Microsoft.Azure.Documents.Linq;
 using System.Collections.Generic;
 using System.Device.Location;
+using HackCovidAPICore.DTO;
+using Microsoft.Azure.Cosmos.Spatial;
+using Microsoft.Azure.Documents;
 
 namespace HackCovidAPICore.DataAccess
 {
@@ -16,6 +19,7 @@ namespace HackCovidAPICore.DataAccess
 		private readonly string endPointUrl = "https://covidcosmosdb.documents.azure.com:443/";
 		private readonly string primaryKey = "jSSmUe7Q6roHGd8j42YhVCkH9or3lP1rM2IKbkIocWF0NDLlrzp4TQaOldRHYwky9l23nAL6nSiRyULP6000kQ==";
 		private readonly string collectionLink = "dbs/S5EfAA==/colls/S5EfAJd6FqA=";
+		private readonly string noteCollectionLink = "dbs/S5EfAA==/colls/S5EfAMyghQo=";
 
 		private DocumentClient client;
 
@@ -204,6 +208,35 @@ namespace HackCovidAPICore.DataAccess
 				}
 			}
 			return true;
+		}
+
+		public async Task<string> SaveNote(NoteDTO noteDTO)
+		{
+			try
+			{
+				NoteModel noteModel = new NoteModel();
+				noteModel.UserId = noteDTO.UserPhoneNumber;
+				noteModel.Category = noteDTO.Category;
+				noteModel.SubCategory = noteDTO.SubCategory;
+				noteModel.NoteTime = DateTime.Now;
+				noteModel.Status = 0;
+				noteModel.Location = new Point(noteDTO.Longitude, noteDTO.Latitude);
+				List<Model.Note> notes = new List<Model.Note>();
+
+				foreach(DTO.Note note in noteDTO.Notes)
+				{
+					Model.Note note1 = new Model.Note();
+					note1.Description = note.Description;
+					note1.Metric = note.Metric;
+					note1.Quantity = note.Quantity;
+					notes.Add(note1);
+				}
+
+				Document document = await client.CreateDocumentAsync(noteCollectionLink, noteModel, null, false);
+				return document.Id;
+			}
+			catch { }//Error Logging
+			return null;
 		}
 	}
 }

@@ -76,5 +76,11 @@ namespace HackCovidAPICore.Controllers
 
 		}
 
+		[HttpPost("submitnote")]
+		public async Task<ActionResult> SubmitNote(NoteDTO noteDTO)
+		{
+			return Ok(await cosmosDBService.SaveNote(noteDTO));
+		}
+
 	}
 }
