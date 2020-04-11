@@ -31,10 +31,10 @@ namespace HackCovidAPICore.Model
 		public List<Shop> Shops { get; set; }
 
 		[JsonProperty(PropertyName = "Category")]
-		public string Category { get; set; }
+		public int Category { get; set; }
 
 		[JsonProperty(PropertyName = "SubCategory")]
-		public string SubCategory { get; set; }
+		public int SubCategory { get; set; }
 
 		[JsonProperty(PropertyName = "Location")]
 		public Point Location { get; set; }
@@ -50,6 +50,9 @@ namespace HackCovidAPICore.Model
 
 		[JsonProperty(PropertyName = "Metric")]
 		public string Metric { get; set; }
+
+		[JsonProperty(PropertyName = "PhoneGuid")]
+		public string PhoneGuid { get; set; }
 	}
 
 	public class Shop
@@ -65,5 +68,23 @@ namespace HackCovidAPICore.Model
 
 		[JsonProperty(PropertyName = "Accepted")]
 		public bool Accepted { get; set; }
+
+		[JsonProperty(PropertyName = "PhoneNumber")]
+		public string PhoneNumber { get; set; }
+
+		[JsonProperty(PropertyName = "DeliveryNumber")]
+		public string DeliveryNumber { get; set; }
+
+		[JsonProperty(PropertyName = "Address")]
+		public string Address { get; set; }
+
+		[JsonProperty(PropertyName = "Distance")]
+		public double Distance { get; set; }
+
+		[JsonProperty(PropertyName = "ShopName")]
+		public string ShopName { get; set; }
+
+		[JsonProperty(PropertyName = "Location")]
+		public Point Location { get; set; }
 	}
 }

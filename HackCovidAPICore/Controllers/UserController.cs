@@ -12,9 +12,11 @@ namespace HackCovidAPICore.Controllers
 	public class UserController : ControllerBase
 	{
 		private ICosmosDBService cosmosDBService;
-		public UserController(ICosmosDBService _cosmosDBService)
+		private IPushNotificationService pushNotificationService;
+		public UserController(ICosmosDBService _cosmosDBService, IPushNotificationService _pushNotificationService)
 		{
 			cosmosDBService = _cosmosDBService;
+			pushNotificationService = _pushNotificationService;
 		}
 
 		[HttpPost("register")]
@@ -79,7 +81,19 @@ namespace HackCovidAPICore.Controllers
 		[HttpPost("submitnote")]
 		public async Task<ActionResult> SubmitNote(NoteDTO noteDTO)
 		{
-			return Ok(await cosmosDBService.SaveNote(noteDTO));
+			try
+			{
+				//Broadcast to shops
+				List<ShopModel> shops = cosmosDBService.GetShopsNearby(noteDTO.Longitude, noteDTO.Latitude, noteDTO.Category);
+				foreach (ShopModel shop in shops)
+				{
+					string body = string.Format("You have received a new request from {0}", noteDTO.UserPhoneNumber);
+					await pushNotificationService.SendNotification(shop.PhoneGuid, "You have received a new request", body);
+				}
+				return Ok(await cosmosDBService.SaveNote(noteDTO, shops));
+			}
+			catch { }
+			return StatusCode(500);
 		}
 
 	}

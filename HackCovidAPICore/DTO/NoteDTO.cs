@@ -13,16 +13,21 @@ namespace HackCovidAPICore.DTO
 		[Required]
 		public string UserPhoneNumber { get; set; }
 
+		[Required]
+		public string PhoneGuid { get; set; }
+
 		public List<Note> Notes { get; set; }
 
 		[Required]
-		public string Category { get; set; }
+		public int Category { get; set; }
 
-		public string SubCategory { get; set; }
+		public int SubCategory { get; set; }
 
 		public double Longitude { get; set; }
 
 		public double Latitude { get; set; }
+
+		public int Distance { get; set; }
 	}
 
 	public class Note

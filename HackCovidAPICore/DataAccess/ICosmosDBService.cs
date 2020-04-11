@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using HackCovidAPICore.DTO;
 using HackCovidAPICore.Model;
+using Microsoft.Azure.Documents;
 
 namespace HackCovidAPICore.DataAccess
 {
@@ -13,6 +14,6 @@ namespace HackCovidAPICore.DataAccess
 		Task<bool> UpdateShopStatus(string userEmail, int status);
 		List<ShopModel> GetShopsNearby(double longitude, double latitude, int businessType);
 		Task<bool> UpdateProfile(ShopModel schema, string password);
-		Task<string> SaveNote(NoteDTO noteDTO);
+		Task<Document> SaveNote(NoteDTO noteDTO, List<ShopModel> shops);
 	}
 }

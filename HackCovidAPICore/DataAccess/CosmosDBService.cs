@@ -210,7 +210,7 @@ namespace HackCovidAPICore.DataAccess
 			return true;
 		}
 
-		public async Task<string> SaveNote(NoteDTO noteDTO)
+		public async Task<Document> SaveNote(NoteDTO noteDTO, List<ShopModel> shops)
 		{
 			try
 			{
@@ -223,7 +223,7 @@ namespace HackCovidAPICore.DataAccess
 				noteModel.Location = new Point(noteDTO.Longitude, noteDTO.Latitude);
 				List<Model.Note> notes = new List<Model.Note>();
 
-				foreach(DTO.Note note in noteDTO.Notes)
+				foreach (DTO.Note note in noteDTO.Notes)
 				{
 					Model.Note note1 = new Model.Note();
 					note1.Description = note.Description;
@@ -232,8 +232,23 @@ namespace HackCovidAPICore.DataAccess
 					notes.Add(note1);
 				}
 
+				noteModel.Shops = new List<Shop>();
+				foreach (ShopModel shop in shops)
+				{
+					Shop shop1 = new Shop();
+					shop1.ShopEmail = shop.UserEmail;
+					shop1.Address = shop.Address;
+					shop1.PhoneNumber = shop.PhoneNumber;
+					shop1.DeliveryNumber = shop.DeliveryNumber;
+					shop1.ShopName = shop.ShopName;
+					shop1.Distance = shop.Distance;
+					shop1.Location = shop.Location;
+					shop1.Accepted = false;
+					noteModel.Shops.Add(shop1);
+				}
+
 				Document document = await client.CreateDocumentAsync(noteCollectionLink, noteModel, null, false);
-				return document.Id;
+				return document;
 			}
 			catch { }//Error Logging
 			return null;

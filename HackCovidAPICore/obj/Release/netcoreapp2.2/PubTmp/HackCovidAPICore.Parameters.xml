@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
-  <parameter name="IIS Web Application Name" description="" value="HackCovidAPICore20200328111910" tags="IisApp">
+  <parameter name="IIS Web Application Name" description="" value="locatezdev" tags="IisApp">
     <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\GITRepository\\Covid-Hackathon-API-App\\HackCovidAPICore\\obj\\Release\\netcoreapp2\.2\\PubTmp\\Out\\$" />
   </parameter>
 </parameters>
