@@ -38,6 +38,7 @@ namespace HackCovidAPICore.Controllers
 			shopModel.StopTime = registerDto.StopTime;
 			shopModel.Address = registerDto.Address;
 			shopModel.PhoneNumber = registerDto.Phone;
+			shopModel.PhoneGuid = registerDto.PhoneGuid;
 
 
 			//await teamDataAccess.Register(registerDto.UserName.ToLower(), registerDto.Password);
@@ -69,6 +70,7 @@ namespace HackCovidAPICore.Controllers
 			shopModel.StopTime = updateProfileDTO.StopTime;
 			shopModel.Address = updateProfileDTO.Address;
 			shopModel.PhoneNumber = updateProfileDTO.Phone;
+			shopModel.PhoneGuid = updateProfileDTO.PhoneGuid;
 
 
 			//await teamDataAccess.Register(registerDto.UserName.ToLower(), registerDto.Password);
@@ -88,12 +90,14 @@ namespace HackCovidAPICore.Controllers
 				foreach (ShopModel shop in shops)
 				{
 					string body = string.Format("You have received a new request from {0}", noteDTO.UserPhoneNumber);
-					await pushNotificationService.SendNotification(shop.PhoneGuid, "You have received a new request", body);
+					//await pushNotificationService.SendNotification(shop.PhoneGuid, "You have received a new request", body);
 				}
-				return Ok(await cosmosDBService.SaveNote(noteDTO, shops));
+				if (shops != null)
+					return Ok(await cosmosDBService.SaveNote(noteDTO, shops));
 			}
 			catch { }
-			return StatusCode(500);
+			return Ok("No shops found with the matching criteria. Please submit by changing the distance");
+			//Ok(null)
 		}
 
 	}

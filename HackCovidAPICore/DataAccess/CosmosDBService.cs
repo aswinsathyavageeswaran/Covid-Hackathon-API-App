@@ -11,6 +11,7 @@ using System.Device.Location;
 using HackCovidAPICore.DTO;
 using Microsoft.Azure.Cosmos.Spatial;
 using Microsoft.Azure.Documents;
+using Newtonsoft.Json.Linq;
 
 namespace HackCovidAPICore.DataAccess
 {
@@ -170,6 +171,7 @@ namespace HackCovidAPICore.DataAccess
 						result.StopTime = schema.StopTime;
 						result.Address = schema.Address;
 						result.PhoneNumber = schema.PhoneNumber;
+						result.PhoneGuid = schema.PhoneGuid;
 
 						if (!string.IsNullOrWhiteSpace(password))
 						{
@@ -251,6 +253,70 @@ namespace HackCovidAPICore.DataAccess
 				return document;
 			}
 			catch { }//Error Logging
+			return null;
+		}
+
+		public async Task<List<NoteModel>> GetRequestedShopNotes(string shopEmail)
+		{
+			try
+			{
+				string queryString = $"SELECT c.id FROM c JOIN s IN c.Shops WHERE s.ShopEmail = '{shopEmail}'";
+				var query = client.CreateDocumentQuery(collectionLink: noteCollectionLink, sqlExpression: queryString, feedOptions: new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true }).AsDocumentQuery();
+				if (query.HasMoreResults)
+				{
+					var results = await query.ExecuteNextAsync();
+					List<NoteModel> notes = new List<NoteModel>();
+					if (results.Any())
+					{
+						foreach (JObject jObject in results.ToList())
+						{
+							NoteModel note = GetNote((string)jObject["id"]);
+							notes.Add(note);
+						}
+						return notes;
+					}
+				}
+			}
+			catch (Exception ex) { }
+			return null;
+		}
+
+		public async Task<List<NoteModel>> GetAllShopNotes(string shopEmail)
+		{
+			try
+			{
+				string queryString = $"SELECT c.id FROM c JOIN s IN c.Shops WHERE s.ShopEmail = '{shopEmail}' AND s.Accepted = true";
+				var query = client.CreateDocumentQuery(collectionLink: noteCollectionLink, sqlExpression: queryString, feedOptions: new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true }).AsDocumentQuery();
+				if (query.HasMoreResults)
+				{
+					var results = await query.ExecuteNextAsync();
+					List<NoteModel> notes = new List<NoteModel>();
+					if (results.Any())
+					{
+						foreach (JObject jObject in results.ToList())
+						{
+							NoteModel note = GetNote((string)jObject["id"]);
+							notes.Add(note);
+						}
+						return notes;
+					}
+				}
+			}
+			catch(Exception ex){ }
+			return null;
+		}
+
+		private NoteModel GetNote(string id)
+		{
+			try
+			{
+				NoteModel doc = client.CreateDocumentQuery<NoteModel>(noteCollectionLink, new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
+										.Where(r => r.Id == id)
+										.AsEnumerable()
+										.SingleOrDefault();
+				return doc;
+			}
+			catch { }
 			return null;
 		}
 	}

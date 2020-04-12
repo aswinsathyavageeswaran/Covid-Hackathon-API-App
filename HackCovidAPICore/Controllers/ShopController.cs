@@ -52,5 +52,17 @@ namespace HackCovidAPICore.Controllers
 			return Ok(businessTypes);
 		}
 
+		[HttpGet("getpendingnotes")]
+		public async Task<ActionResult> GetAllPendingOrders(string shopEmail)
+		{
+			return Ok(await cosmosDBService.GetRequestedShopNotes(shopEmail));
+		}
+
+		[HttpGet("getshoporders")]
+		public async Task<ActionResult> GetAllShopOrders(string shopEmail)
+		{
+			return Ok(await cosmosDBService.GetAllShopNotes(shopEmail));
+		}
+
 	}
 }

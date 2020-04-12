@@ -6,7 +6,6 @@ C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Release\netcoreapp
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Release\netcoreapp2.2\HackCovidAPICore.runtimeconfig.dev.json
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Release\netcoreapp2.2\HackCovidAPICore.dll
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Release\netcoreapp2.2\HackCovidAPICore.pdb
-C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.csprojAssemblyReference.cache
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.csproj.CoreCompileInputs.cache
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.RazorAssemblyInfo.cache
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.RazorAssemblyInfo.cs
@@ -15,3 +14,4 @@ C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.RazorTargetAssemblyInfo.cache
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.dll
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.pdb
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.csprojAssemblyReference.cache
