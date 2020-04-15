@@ -223,7 +223,8 @@ namespace HackCovidAPICore.DataAccess
 				noteModel.NoteTime = DateTime.Now;
 				noteModel.Status = 0;
 				noteModel.Location = new Point(noteDTO.Longitude, noteDTO.Latitude);
-				List<Model.Note> notes = new List<Model.Note>();
+				noteModel.Notes = new List<Model.Note>();
+				noteModel.Shops = new List<Shop>();
 
 				foreach (DTO.Note note in noteDTO.Notes)
 				{
@@ -231,7 +232,7 @@ namespace HackCovidAPICore.DataAccess
 					note1.Description = note.Description;
 					note1.Metric = note.Metric;
 					note1.Quantity = note.Quantity;
-					notes.Add(note1);
+					noteModel.Notes.Add(note1);
 				}
 
 				noteModel.Shops = new List<Shop>();
