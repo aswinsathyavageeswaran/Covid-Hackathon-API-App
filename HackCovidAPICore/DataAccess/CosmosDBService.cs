@@ -258,7 +258,7 @@ namespace HackCovidAPICore.DataAccess
 			return null;
 		}
 
-		public async Task<List<NoteModel>> GetRequestedShopNotes(string shopEmail)
+		public async Task<List<NoteModel>> GetAllShopNotes(string shopEmail)
 		{
 			try
 			{
@@ -273,33 +273,10 @@ namespace HackCovidAPICore.DataAccess
 						foreach (JObject jObject in results.ToList())
 						{
 							NoteModel note = GetNote((string)jObject["id"]);
+							note.Shops.RemoveAll(x => x.ShopEmail != shopEmail);
 							notes.Add(note);
 						}
-						return notes;
-					}
-				}
-			}
-			catch (Exception ex) { }
-			return null;
-		}
-
-		public async Task<List<NoteModel>> GetAllShopNotes(string shopEmail)
-		{
-			try
-			{
-				string queryString = $"SELECT c.id FROM c JOIN s IN c.Shops WHERE s.ShopEmail = '{shopEmail}' AND s.Accepted = true";
-				var query = client.CreateDocumentQuery(collectionLink: noteCollectionLink, sqlExpression: queryString, feedOptions: new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true }).AsDocumentQuery();
-				if (query.HasMoreResults)
-				{
-					var results = await query.ExecuteNextAsync();
-					List<NoteModel> notes = new List<NoteModel>();
-					if (results.Any())
-					{
-						foreach (JObject jObject in results.ToList())
-						{
-							NoteModel note = GetNote((string)jObject["id"]);
-							notes.Add(note);
-						}
+							
 						return notes;
 					}
 				}
