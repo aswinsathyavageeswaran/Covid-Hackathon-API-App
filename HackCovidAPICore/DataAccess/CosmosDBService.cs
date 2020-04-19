@@ -350,6 +350,7 @@ namespace HackCovidAPICore.DataAccess
 			{
 				NoteModel note = GetNote(confirmOrder.NoteId);
 				note.Shops.First(x => x.ShopEmail.Equals(confirmOrder.ShopEmail)).Accepted = true;
+				note.Shops.RemoveAll(x => x.ShopEmail != confirmOrder.ShopEmail);
 				
 				/*Important - need to get shop guid ocne registration is complete */
 				string shopGuid = null; //need to get shopGuid
