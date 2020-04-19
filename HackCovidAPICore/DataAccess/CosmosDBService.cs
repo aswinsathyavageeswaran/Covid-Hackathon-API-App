@@ -304,7 +304,7 @@ namespace HackCovidAPICore.DataAccess
 					}
 				}
 			}
-			catch(Exception ex){ }
+			catch (Exception ex) { }
 			return null;
 		}
 
@@ -320,6 +320,26 @@ namespace HackCovidAPICore.DataAccess
 			}
 			catch { }
 			return null;
+		}
+
+		public async Task<List<NoteModel>> GetAllUserNotes(string phoneNumber)
+		{
+			List<NoteModel> notes = new List<NoteModel>();
+			try
+			{
+				string queryString = $"SELECT * FROM c WHERE c.UserId = '{phoneNumber}'";
+				var query = client.CreateDocumentQuery<NoteModel>(collectionLink: noteCollectionLink, sqlExpression: queryString, feedOptions: new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true }).AsDocumentQuery();
+				if (query.HasMoreResults)
+				{
+					var results = await query.ExecuteNextAsync<NoteModel>();
+					if (results.Any())
+					{
+						notes = results.ToList();
+					}
+				}
+			}
+			catch { }
+			return notes;
 		}
 	}
 }

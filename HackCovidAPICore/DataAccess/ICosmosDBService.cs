@@ -17,5 +17,6 @@ namespace HackCovidAPICore.DataAccess
 		Task<Document> SaveNote(NoteDTO noteDTO, List<ShopModel> shops);
 		Task<List<NoteModel>> GetRequestedShopNotes(string shopEmail);
 		Task<List<NoteModel>> GetAllShopNotes(string shopEmail);
+		Task<List<NoteModel>> GetAllUserNotes(string phoneNumber);
 	}
 }

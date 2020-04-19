@@ -100,5 +100,11 @@ namespace HackCovidAPICore.Controllers
 			//Ok(null)
 		}
 
+		[HttpGet("getusernotes")]
+		public async Task<ActionResult> GetAllUserNotes(string phoneNumber)
+		{
+			return Ok(await cosmosDBService.GetAllUserNotes(phoneNumber));
+		}
+
 	}
 }
