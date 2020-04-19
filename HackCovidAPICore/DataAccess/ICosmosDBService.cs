@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using HackCovidAPICore.DTO;
 using HackCovidAPICore.Model;
@@ -17,5 +18,6 @@ namespace HackCovidAPICore.DataAccess
 		Task<Document> SaveNote(NoteDTO noteDTO, List<ShopModel> shops);
 		Task<List<NoteModel>> GetAllShopNotes(string shopEmail);
 		Task<List<NoteModel>> GetAllUserNotes(string phoneNumber);
+		Task<Tuple<string,string>> UpdateAvailableItems(ConfirmNoteItemsDTO availableItems);
 	}
 }

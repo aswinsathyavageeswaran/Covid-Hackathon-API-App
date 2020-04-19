@@ -318,5 +318,30 @@ namespace HackCovidAPICore.DataAccess
 			catch { }
 			return notes;
 		}
+
+		public async Task<Tuple<string,string>> UpdateAvailableItems(ConfirmNoteItemsDTO availableItems)
+		{
+			try
+			{
+				NoteModel note = GetNote(availableItems.NoteID);
+				Shop shop = note.Shops.First(x => x.ShopEmail.Equals(availableItems.UserEmail));
+				shop.Notes = new List<Model.Note>();
+				foreach(DTO.Note item in availableItems.Notes)
+				{
+					Model.Note confirmedItem = new Model.Note();
+					confirmedItem.Description = item.Description;
+					confirmedItem.Metric = item.Metric;
+					confirmedItem.Quantity = item.Quantity;
+					shop.Notes.Add(confirmedItem);
+				}
+				note.Shops.RemoveAll(x => x.ShopEmail.Equals(availableItems.UserEmail));
+				shop.ResponseTime = DateTime.Now;
+				note.Shops.Add(shop);
+				await client.ReplaceDocumentAsync(note.SelfLink,note);
+				return new Tuple<string, string>(shop.ShopName, note.PhoneGuid);
+			}
+			catch { }//Error Logging
+			return null;
+		}
 	}
 }

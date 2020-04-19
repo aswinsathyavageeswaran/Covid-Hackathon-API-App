@@ -2,6 +2,7 @@
 using HackCovidAPICore.DTO;
 using HackCovidAPICore.Model;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -56,6 +57,19 @@ namespace HackCovidAPICore.Controllers
 		public async Task<ActionResult> GetAllShopOrders(string shopEmail)
 		{
 			return Ok(await cosmosDBService.GetAllShopNotes(shopEmail));
+		}
+
+		[HttpPost("confirmnoteitems")]
+		public async Task<ActionResult> ConfirmNoteItems(ConfirmNoteItemsDTO availableItems)
+		{
+			Tuple<string,string> details = await cosmosDBService.UpdateAvailableItems(availableItems);
+			if (details!=null)
+			{
+				string title = $"The shop {details.Item1} has responded to your order";
+				await pushNotificationService.SendNotification(details.Item2, title, title);
+				return Ok("Note Successfully Updated");
+			}
+			return NoContent();
 		}
 	}
 }
