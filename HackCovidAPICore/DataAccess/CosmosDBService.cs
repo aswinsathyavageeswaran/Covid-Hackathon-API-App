@@ -343,5 +343,22 @@ namespace HackCovidAPICore.DataAccess
 			catch { }//Error Logging
 			return null;
 		}
+
+		public async Task<string> ConfirmOrderToShop(ConfirmOrderDTO confirmOrder)
+		{
+			try
+			{
+				NoteModel note = GetNote(confirmOrder.NoteId);
+				note.Shops.First(x => x.ShopEmail.Equals(confirmOrder.ShopEmail)).Accepted = true;
+				
+				/*Important - need to get shop guid ocne registration is complete */
+				string shopGuid = null; //need to get shopGuid
+
+				await client.ReplaceDocumentAsync(note.SelfLink, note);
+				return shopGuid;
+			}
+			catch { }//Error Logging
+			return null;
+		}
 	}
 }

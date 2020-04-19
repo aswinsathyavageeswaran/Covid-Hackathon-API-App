@@ -106,5 +106,17 @@ namespace HackCovidAPICore.Controllers
 			return Ok(await cosmosDBService.GetAllUserNotes(phoneNumber));
 		}
 
+		[HttpPost("confirmorder")]
+		public async Task<ActionResult> ConfirmOrderToShop(ConfirmOrderDTO confirmOrder)
+		{
+			string shopGuid = await cosmosDBService.ConfirmOrderToShop(confirmOrder);
+			if(shopGuid!=null)
+			{
+				await pushNotificationService.SendNotification(shopGuid, "You have received a new order", null);
+				return Ok("Order placed to the shop");
+			}
+			return Ok("Order is placed but shop notification note complete");
+		}
+
 	}
 }
