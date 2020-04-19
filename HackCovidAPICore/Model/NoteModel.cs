@@ -38,6 +38,9 @@ namespace HackCovidAPICore.Model
 
 		[JsonProperty(PropertyName = "Location")]
 		public Point Location { get; set; }
+
+		[JsonProperty(PropertyName = "PhoneGuid")]
+		public string PhoneGuid { get; set; }
 	}
 
 	public class Note
@@ -50,9 +53,6 @@ namespace HackCovidAPICore.Model
 
 		[JsonProperty(PropertyName = "Metric")]
 		public string Metric { get; set; }
-
-		[JsonProperty(PropertyName = "PhoneGuid")]
-		public string PhoneGuid { get; set; }
 	}
 
 	public class Shop

@@ -222,6 +222,7 @@ namespace HackCovidAPICore.DataAccess
 				noteModel.SubCategory = noteDTO.SubCategory;
 				noteModel.NoteTime = DateTime.Now;
 				noteModel.Status = 0;
+				noteModel.PhoneGuid = noteDTO.PhoneGuid;
 				noteModel.Location = new Point(noteDTO.Longitude, noteDTO.Latitude);
 				noteModel.Notes = new List<Model.Note>();
 				noteModel.Shops = new List<Shop>();
