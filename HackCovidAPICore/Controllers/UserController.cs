@@ -110,12 +110,20 @@ namespace HackCovidAPICore.Controllers
 		public async Task<ActionResult> ConfirmOrderToShop(ConfirmOrderDTO confirmOrder)
 		{
 			string shopGuid = await cosmosDBService.ConfirmOrderToShop(confirmOrder);
-			if(shopGuid!=null)
+			if (shopGuid != null)
 			{
 				await pushNotificationService.SendNotification(shopGuid, "You have received a new order", null);
 				return Ok("Order placed to the shop");
 			}
 			return Ok("Order is placed but shop notification note complete");
+		}
+
+		[HttpDelete("deletenote")]
+		public async Task<ActionResult> DeleteNote(string noteId)
+		{
+			if (await cosmosDBService.DeleteNote(noteId))
+				return Ok("Note Deleted Successfully");
+			return Ok("Error deleting Note");
 		}
 
 	}
