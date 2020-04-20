@@ -367,12 +367,25 @@ namespace HackCovidAPICore.DataAccess
 			try
 			{
 				NoteModel note = GetNote(noteId);
-				PartitionKey partitionKey = new PartitionKey(noteId);
-				await client.DeleteDocumentAsync(note.SelfLink,new RequestOptions {PartitionKey = new PartitionKey(Undefined.Value)});
+				await client.DeleteDocumentAsync(note.SelfLink, new RequestOptions { PartitionKey = new PartitionKey(Undefined.Value) });
 				return true;
 			}
-			catch(Exception ex) { }
+			catch { }
 			return false;
+		}
+
+		public async Task<Tuple<string, string>> DeleteOrder(string noteId, string shopEmail)
+		{
+			try
+			{
+				NoteModel note = GetNote(noteId);
+				string shopName = note.Shops.First(x => x.ShopEmail.Equals(shopEmail)).ShopName;
+				note.Shops.RemoveAll(x => x.ShopEmail.Equals(shopEmail));
+				await client.ReplaceDocumentAsync(note.SelfLink, note);
+				return new Tuple<string, string>(note.PhoneGuid, shopName);
+			}
+			catch { }
+			return null;
 		}
 	}
 }

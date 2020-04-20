@@ -49,7 +49,7 @@ namespace HackCovidAPICore.Controllers
 
 		[HttpGet("getbusinesstypes")]
 		public ActionResult GetBusinessTypes()
-		{			
+		{
 			return Ok(businessTypes);
 		}
 
@@ -62,14 +62,27 @@ namespace HackCovidAPICore.Controllers
 		[HttpPost("confirmnoteitems")]
 		public async Task<ActionResult> ConfirmNoteItems(ConfirmNoteItemsDTO availableItems)
 		{
-			Tuple<string,string> details = await cosmosDBService.UpdateAvailableItems(availableItems);
-			if (details!=null)
+			Tuple<string, string> details = await cosmosDBService.UpdateAvailableItems(availableItems);
+			if (details != null)
 			{
 				string title = $"The shop {details.Item1} has responded to your order";
 				await pushNotificationService.SendNotification(details.Item2, title, title);
 				return Ok("Note Successfully Updated");
 			}
 			return NoContent();
+		}
+
+		[HttpDelete("deleteorder")]
+		public async Task<ActionResult> DeleteOrder(ConfirmOrderDTO orderDetails)
+		{
+			Tuple<string,string> result = await cosmosDBService.DeleteOrder(orderDetails.NoteId, orderDetails.ShopEmail);
+			if (result != null)
+			{
+				string notification = $"The shop {result.Item2} has cancelled the order";
+				await pushNotificationService.SendNotification(result.Item1,notification, notification);
+				return Ok("Order Cancelled Successfully");
+			}
+			return Ok("Unable to cancel the order");
 		}
 	}
 }
