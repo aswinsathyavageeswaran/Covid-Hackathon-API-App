@@ -351,9 +351,9 @@ namespace HackCovidAPICore.DataAccess
 				NoteModel note = GetNote(confirmOrder.NoteId);
 				note.Shops.First(x => x.ShopEmail.Equals(confirmOrder.ShopEmail)).Accepted = true;
 				note.Shops.RemoveAll(x => x.ShopEmail != confirmOrder.ShopEmail);
-
+				note.Status = 1;
 				/*Important - need to get shop guid ocne registration is complete */
-				string shopGuid = null; //need to get shopGuid
+				string shopGuid = "guid"; //need to get shopGuid
 
 				await client.ReplaceDocumentAsync(note.SelfLink, note);
 				return shopGuid;
@@ -385,6 +385,20 @@ namespace HackCovidAPICore.DataAccess
 				return new Tuple<string, string>(note.PhoneGuid, shopName);
 			}
 			catch { }
+			return null;
+		}
+
+		public async Task<Tuple<string, string>> CompleteOrder(string noteId)
+		{
+			try
+			{
+				NoteModel note = GetNote(noteId);
+				note.Status = 2;
+				//IMPORTANT : need to send back guid
+				await client.ReplaceDocumentAsync(note.SelfLink, note);
+				return new Tuple<string, string>("guid",note.UserId);
+			}
+			catch { }//Error Logging
 			return null;
 		}
 	}

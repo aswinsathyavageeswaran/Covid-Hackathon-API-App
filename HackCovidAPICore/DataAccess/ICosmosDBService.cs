@@ -18,9 +18,10 @@ namespace HackCovidAPICore.DataAccess
 		Task<Document> SaveNote(NoteDTO noteDTO, List<ShopModel> shops);
 		Task<List<NoteModel>> GetAllShopNotes(string shopEmail);
 		Task<List<NoteModel>> GetAllUserNotes(string phoneNumber);
-		Task<Tuple<string,string>> UpdateAvailableItems(ConfirmNoteItemsDTO availableItems);
+		Task<Tuple<string, string>> UpdateAvailableItems(ConfirmNoteItemsDTO availableItems);
 		Task<string> ConfirmOrderToShop(ConfirmOrderDTO confirmOrder);
 		Task<bool> DeleteNote(string noteId);
-		Task<Tuple<string, string>> DeleteOrder(string noteId, string shopEmail)
+		Task<Tuple<string, string>> DeleteOrder(string noteId, string shopEmail);
+		Task<Tuple<string,string>> CompleteOrder(string noteId);
 	}
 }

@@ -4,6 +4,7 @@ using HackCovidAPICore.DTO;
 using HackCovidAPICore.DataAccess;
 using HackCovidAPICore.Model;
 using System.Collections.Generic;
+using System;
 
 namespace HackCovidAPICore.Controllers
 {
@@ -124,6 +125,18 @@ namespace HackCovidAPICore.Controllers
 			if (await cosmosDBService.DeleteNote(noteId))
 				return Ok("Note Deleted Successfully");
 			return Ok("Error deleting Note");
+		}
+
+		[HttpPost("completeorder")]
+		public async Task<ActionResult> CompleteOrder(string noteId)
+		{
+			Tuple<string,string> result = await cosmosDBService.CompleteOrder(noteId);
+			if (result != null)
+			{
+				await pushNotificationService.SendNotification(result.Item1, $"{result.Item2} has completed the order", null);
+				return Ok("Order completed Successfully");
+			}
+			return Ok("Unable to complete the order");
 		}
 
 	}
