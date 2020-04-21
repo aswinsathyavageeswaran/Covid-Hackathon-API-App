@@ -248,6 +248,7 @@ namespace HackCovidAPICore.DataAccess
 					shop1.Distance = shop.Distance;
 					shop1.Location = shop.Location;
 					shop1.Accepted = false;
+					shop1.ShopStatus = 0;
 					noteModel.Shops.Add(shop1);
 				}
 
@@ -336,6 +337,7 @@ namespace HackCovidAPICore.DataAccess
 				}
 				note.Shops.RemoveAll(x => x.ShopEmail.Equals(availableItems.UserEmail));
 				shop.ResponseTime = DateTime.Now;
+				shop.ShopStatus = 1;
 				note.Shops.Add(shop);
 				await client.ReplaceDocumentAsync(note.SelfLink, note);
 				return new Tuple<string, string>(shop.ShopName, note.PhoneGuid);
@@ -397,6 +399,18 @@ namespace HackCovidAPICore.DataAccess
 				//IMPORTANT : need to send back guid
 				await client.ReplaceDocumentAsync(note.SelfLink, note);
 				return new Tuple<string, string>("guid",note.UserId);
+			}
+			catch { }//Error Logging
+			return null;
+		}
+		public async Task<string> UpdateShopOrderStatus(string noteId, string shopEmail, int Status)
+		{
+			try
+			{
+				NoteModel note = GetNote(noteId);
+				note.Shops.First(x => x.ShopEmail.Equals(shopEmail)).ShopStatus = Status;
+				await client.ReplaceDocumentAsync(note.SelfLink, note);
+				return note.PhoneGuid;
 			}
 			catch { }//Error Logging
 			return null;

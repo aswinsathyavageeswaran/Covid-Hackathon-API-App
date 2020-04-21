@@ -23,5 +23,6 @@ namespace HackCovidAPICore.DataAccess
 		Task<bool> DeleteNote(string noteId);
 		Task<Tuple<string, string>> DeleteOrder(string noteId, string shopEmail);
 		Task<Tuple<string,string>> CompleteOrder(string noteId);
+		Task<string> UpdateShopOrderStatus(string noteId, string shopEmail, int Status);
 	}
 }

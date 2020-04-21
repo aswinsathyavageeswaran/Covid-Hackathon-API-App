@@ -75,14 +75,32 @@ namespace HackCovidAPICore.Controllers
 		[HttpDelete("deleteorder")]
 		public async Task<ActionResult> DeleteOrder(ConfirmOrderDTO orderDetails)
 		{
-			Tuple<string,string> result = await cosmosDBService.DeleteOrder(orderDetails.NoteId, orderDetails.ShopEmail);
+			Tuple<string, string> result = await cosmosDBService.DeleteOrder(orderDetails.NoteId, orderDetails.ShopEmail);
 			if (result != null)
 			{
 				string notification = $"The shop {result.Item2} has cancelled the order";
-				await pushNotificationService.SendNotification(result.Item1,notification, notification);
+				await pushNotificationService.SendNotification(result.Item1, notification, notification);
 				return Ok("Order Cancelled Successfully");
 			}
 			return Ok("Unable to cancel the order");
+		}
+
+		[HttpPost("changeorderstatus")]
+		public async Task<ActionResult> ChangeOrderStatus(ShopOrderStatusDTO orderStatus)
+		{
+			string userGuid = await cosmosDBService.UpdateShopOrderStatus(orderStatus.NoteId, orderStatus.ShopEmail, orderStatus.Status);
+			if (userGuid != null)
+			{
+				string notification = null;
+				if (orderStatus.Status == 2)
+					notification = "Shop has packed your order";
+				else if (orderStatus.Status == 3)
+					notification = "Shop has completed your order";
+				if (!string.IsNullOrEmpty(notification))
+					await pushNotificationService.SendNotification(userGuid, notification, notification);
+				return Ok("Successfully Updated the Shop Status");
+			}
+			return BadRequest("Something went Wrong!");
 		}
 	}
 }

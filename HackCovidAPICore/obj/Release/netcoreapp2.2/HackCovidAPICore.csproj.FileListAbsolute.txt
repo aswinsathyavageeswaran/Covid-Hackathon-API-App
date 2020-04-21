@@ -15,3 +15,7 @@ C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.dll
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.pdb
 C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.csprojAssemblyReference.cache
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Release\netcoreapp2.2\appsettings.Development.json
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Release\netcoreapp2.2\appsettings.json
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\bin\Release\netcoreapp2.2\Properties\launchSettings.json
+C:\GITRepository\Covid-Hackathon-API-App\HackCovidAPICore\obj\Release\netcoreapp2.2\HackCovidAPICore.genruntimeconfig.cache
