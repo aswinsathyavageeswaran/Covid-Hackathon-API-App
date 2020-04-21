@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using HackCovidAPICore.DataAccess;
+using AutoMapper;
+using System;
 
 namespace HackCovidAPICore
 {
@@ -20,6 +22,9 @@ namespace HackCovidAPICore
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+			services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+			services.AddSingleton<INoteCosmosDB>(x => new NoteCosmosDB(Configuration.GetConnectionString("NoteCosmosDB")));
+			services.AddSingleton<IUserCosmosDB>(x=> new UserCosmosDB(Configuration.GetConnectionString("UserCosmosDB")));
 			services.AddSingleton(typeof(ICosmosDBService), typeof(CosmosDBService));
 			services.AddSingleton(typeof(IPushNotificationService), typeof(PushNotificationService));
 			services.AddCors();

@@ -92,5 +92,13 @@ namespace HackCovidAPICore.Model
 
 		[JsonProperty(PropertyName = "ShopStatus")]
 		public int ShopStatus { get; set; }
+
+		[JsonProperty(PropertyName = "PhoneGuid")]
+		public string PhoneGuid { get; set; }
+	}
+
+	public class Shops
+	{
+		public List<Shop> Shop { get; set; }
 	}
 }

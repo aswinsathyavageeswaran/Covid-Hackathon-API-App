@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "Nl7hbVVdOrmQyTKq5hj6M0AQdxgr+a2cS2ZijMmP1D280uTCZ6tXBPwWhRVunaN/9w4y4ydMMUQTnsiT5lWB0w==",
+  "dgSpecHash": "54MTT8/uLR9OT4BVXsg6WA1bzYZM4OKzWrKF+c8TFqU3eoOd27gjfFpjyDmC1VNWLQyjMCPzq6YH5BJGRDND1g==",
   "success": true,
   "projectFilePath": "C:\\GITRepository\\Covid-Hackathon-API-App\\HackCovidAPICore\\HackCovidAPICore.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\anoop.krishnan\\.nuget\\packages\\automapper\\9.0.0\\automapper.9.0.0.nupkg.sha512",
+    "C:\\Users\\anoop.krishnan\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\7.0.0\\automapper.extensions.microsoft.dependencyinjection.7.0.0.nupkg.sha512",
     "C:\\Users\\anoop.krishnan\\.nuget\\packages\\microsoft.aspnet.webapi.client\\5.2.6\\microsoft.aspnet.webapi.client.5.2.6.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.aspnetcore\\2.2.0\\microsoft.aspnetcore.2.2.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.aspnetcore.antiforgery\\2.2.0\\microsoft.aspnetcore.antiforgery.2.2.0.nupkg.sha512",

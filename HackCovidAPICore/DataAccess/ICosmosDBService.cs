@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using HackCovidAPICore.DTO;
 using HackCovidAPICore.Model;
 using Microsoft.Azure.Documents;
+using HackCovidAPICore.ResponseModel;
 
 namespace HackCovidAPICore.DataAccess
 {

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using Microsoft.Azure.Cosmos.Spatial;
+using System.Collections.Generic;
 
 namespace HackCovidAPICore.Model
 {
@@ -61,45 +62,8 @@ namespace HackCovidAPICore.Model
 		public double Distance { get; set; }
 	}
 
-	public class UserInfo
+	public class ShopsModel
 	{
-		[JsonProperty(PropertyName = "ShopName")]
-		public string ShopName { get; set; }
-
-		[JsonProperty(PropertyName = "FirstName")]
-		public string FirstName { get; set; }
-
-		[JsonProperty(PropertyName = "LastName")]
-		public string LastName { get; set; }
-
-		[JsonProperty(PropertyName = "TypeOfBusiness")]
-		public int TypeOfBusiness { get; set; }
-
-		[JsonProperty(PropertyName = "Longitude")]
-		public double Longitude { get; set; }
-
-		[JsonProperty(PropertyName = "Latitude")]
-		public double Latitude { get; set; }
-
-		[JsonProperty(PropertyName = "Status")]
-		public int Status { get; set; }
-
-		[JsonProperty(PropertyName = "DeliveryNumber")]
-		public string DeliveryNumber { get; set; }
-
-		[JsonProperty(PropertyName = "Phone")]
-		public string Phone { get; set; }
-
-		[JsonProperty(PropertyName = "StartTime")]
-		public DateTime StartTime { get; set; }
-
-		[JsonProperty(PropertyName = "StopTime")]
-		public DateTime StopTime { get; set; }
-
-		[JsonProperty(PropertyName = "Address")]
-		public string Address { get; set; }
-
-		[JsonProperty(PropertyName = "UserEmail")]
-		public string UserEmail { get; set; }
+		public List<ShopModel> ShopModel { get; set; }
 	}
 }
