@@ -86,14 +86,9 @@ namespace HackCovidAPICore.Controllers
 			List<ShopModel> shops = await userCosmosDBService.GetShops(noteDTO.Category);
 			if (shops?.Count > 0)
 			{
-				var coord = new GeoCoordinate(noteDTO.Latitude, noteDTO.Longitude);
-				shops.ForEach(x =>
-				{
-					x.Distance = Math.Round((new GeoCoordinate(x.Location.Position.Latitude, x.Location.Position.Longitude).GetDistanceTo(coord)) * 1.60934 / 1000, 2);
-				});
-				List<ShopModel> nearbyShops = shops.Where(x => x.Distance < 10).OrderBy(x => x.Distance).OrderBy(x => x.Status).ToList();
+				List<ShopModel> nearbyShops = DistanceCalculator.GetDistance(shops, noteDTO.Latitude, noteDTO.Longitude);
 
-				foreach (ShopModel shop in shops)
+				foreach (ShopModel shop in nearbyShops)
 				{
 					string body = string.Format("You have received a new request from {0}", noteDTO.UserPhoneNumber);
 					await pushNotificationService.SendNotification(shop.PhoneGuid, "You have received a new request", body);
@@ -103,14 +98,15 @@ namespace HackCovidAPICore.Controllers
 				NoteModel note = mapper.Map<NoteModel>(noteDTO);
 				ShopsModel shopsModel = new ShopsModel();
 				shopsModel.ShopModel = nearbyShops;
-				Shops shopsresult = mapper.Map<Shops>(shopsModel);
+				Model.Shops shopsresult = mapper.Map<Model.Shops>(shopsModel);
 				note.Shops = shopsresult.Shop;
 
 				//Assigning fields
 				note.NoteTime = DateTime.Now;
 				note.Status = 0;
 
-				if (await noteCosmosDBService.CreateDocumentAsync(note))
+				note = await noteCosmosDBService.CreateAndReturnDocumentAsync(note);
+				if (note != null)
 					return Ok(mapper.Map<NoteInfo>(note));
 			}
 			return Ok("No shops found with the matching criteria");
@@ -119,7 +115,9 @@ namespace HackCovidAPICore.Controllers
 		[HttpGet("getusernotes")]
 		public async Task<ActionResult> GetAllUserNotes(string phoneNumber)
 		{
-			return Ok(await noteCosmosDBService.GetNotes(phoneNumber));
+			NotesModel notes = new NotesModel();
+			notes.NoteModel = await noteCosmosDBService.GetNotes(phoneNumber);
+			return Ok(mapper.Map<NotesInfo>(notes).NoteInfo);
 		}
 
 		[HttpPost("confirmorder")]

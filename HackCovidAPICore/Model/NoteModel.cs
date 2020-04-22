@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Cosmos.Spatial;
+﻿using HackCovidAPICore.ResponseModel;
+using Microsoft.Azure.Cosmos.Spatial;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -95,6 +96,12 @@ namespace HackCovidAPICore.Model
 
 		[JsonProperty(PropertyName = "PhoneGuid")]
 		public string PhoneGuid { get; set; }
+	}
+
+
+	public class NotesModel
+	{
+		public List<NoteModel> NoteModel { get; set; }
 	}
 
 	public class Shops

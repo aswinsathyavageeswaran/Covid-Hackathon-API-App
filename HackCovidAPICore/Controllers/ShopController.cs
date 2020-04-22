@@ -1,9 +1,15 @@
-﻿using HackCovidAPICore.DataAccess;
+﻿using AutoMapper;
+using HackCovidAPICore.DataAccess;
 using HackCovidAPICore.DTO;
+using HackCovidAPICore.Enumerators;
 using HackCovidAPICore.Model;
+using HackCovidAPICore.ResponseModel;
+using HackCovidAPICore.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace HackCovidAPICore.Controllers
@@ -12,95 +18,123 @@ namespace HackCovidAPICore.Controllers
 	[ApiController]
 	public class ShopController : ControllerBase
 	{
-		private ICosmosDBService cosmosDBService;
 		private IPushNotificationService pushNotificationService;
-		private List<BusinessTypeModel> businessTypes;
-		public ShopController(ICosmosDBService _cosmosDBService, IPushNotificationService _pushNotificationService)
+		private INoteCosmosDB noteCosmosDBService;
+		private IUserCosmosDB userCosmosDBService;
+		private IMapper mapper;
+		public ShopController(IPushNotificationService _pushNotificationService, IMapper _mapper, INoteCosmosDB _noteCosmosDB, IUserCosmosDB _userCosmosDB)
 		{
-			cosmosDBService = _cosmosDBService;
 			pushNotificationService = _pushNotificationService;
-			businessTypes = new List<BusinessTypeModel>();
-			businessTypes.Add(new BusinessTypeModel { TypeId = 1, Description = "Medical / Pharmacy" });
-			businessTypes.Add(new BusinessTypeModel { TypeId = 2, Description = "Groceries / Provision Stores" });
-			businessTypes.Add(new BusinessTypeModel { TypeId = 3, Description = "Govt. Covid Help Centers / Hospitals" });
-			businessTypes.Add(new BusinessTypeModel { TypeId = 4, Description = "Vegetables / Fruits" });
-			businessTypes.Add(new BusinessTypeModel { TypeId = 5, Description = "Petrol Pumps" });
-			businessTypes.Add(new BusinessTypeModel { TypeId = 6, Description = "Meat / Diary Products" });
+			mapper = _mapper;
+			noteCosmosDBService = _noteCosmosDB;
+			userCosmosDBService = _userCosmosDB;
 		}
 
 		[HttpPost("changeshopstatus")]
 		public async Task<ActionResult> ChangeShopStatus(ShopStatusDTO shopStatusDto)
 		{
-			if (await cosmosDBService.UpdateShopStatus(shopStatusDto.UserEmail, shopStatusDto.Status))
-				return Ok("Successfully Updated the Shop Status");
-			return BadRequest("Something went Wrong!");
+			ShopModel shop = await userCosmosDBService.GetUserInfo(shopStatusDto.UserEmail);
+			if (shop != null)
+			{
+				shop.Status = shopStatusDto.Status;
+				if (await userCosmosDBService.ReplaceDocumentAsync(shop.SelfLink, shop))
+					return Ok("Shop status changed successfully");
+				return StatusCode(500, "Unable to update the status");
+			}
+			return BadRequest("Couldn't find the shop specified");
 		}
 
 		[HttpPost("shopsnearby")]
-		public ActionResult GetNearbyShops(ShopsNearbyDTO shopsNearbyDTO)
+		public async Task<ActionResult> GetNearbyShops(ShopsNearbyDTO shopsNearbyDTO)
 		{
-			try
+			List<ShopModel> shops = await userCosmosDBService.GetShops(shopsNearbyDTO.TypeOfBusiness);
+			if (shops?.Count > 0)
 			{
-				return Ok(cosmosDBService.GetShopsNearby(shopsNearbyDTO.Longitude, shopsNearbyDTO.Latitude, shopsNearbyDTO.TypeOfBusiness));
+				ShopsModel shopsModel = new ShopsModel();
+				shopsModel.ShopModel = DistanceCalculator.GetDistance(shops, shopsNearbyDTO.Latitude, shopsNearbyDTO.Longitude);
+				return Ok(mapper.Map<ResponseModel.Shops>(shopsModel).Shop);
 			}
-			catch { }
-			return BadRequest("Unable to find any Shops Nearby");
+			return Ok("Couldn't find any shops nearby");
 		}
 
 		[HttpGet("getbusinesstypes")]
 		public ActionResult GetBusinessTypes()
 		{
-			return Ok(businessTypes);
+			return Ok(BusinessTypesEnum.BusinessTypes);
 		}
 
 		[HttpGet("getallshopnotes")]
 		public async Task<ActionResult> GetAllShopOrders(string shopEmail)
 		{
-			return Ok(await cosmosDBService.GetAllShopNotes(shopEmail));
+			NotesModel notes = new NotesModel();
+			notes.NoteModel = await noteCosmosDBService.GetShopNotesAsList(shopEmail);
+			return Ok(mapper.Map<NotesInfo>(notes).NoteInfo);
 		}
 
 		[HttpPost("confirmnoteitems")]
 		public async Task<ActionResult> ConfirmNoteItems(ConfirmNoteItemsDTO availableItems)
 		{
-			Tuple<string, string> details = await cosmosDBService.UpdateAvailableItems(availableItems);
-			if (details != null)
+			NoteModel note = await noteCosmosDBService.GetNote(availableItems.NoteID);
+			if (note != null)
 			{
-				string title = $"The shop {details.Item1} has responded to your order";
-				await pushNotificationService.SendNotification(details.Item2, title, title);
-				return Ok("Note Successfully Updated");
+				Model.Shop shop = note.Shops.First(x => x.ShopEmail.Equals(availableItems.UserEmail));
+				shop.Notes = mapper.Map<NoteModel>(availableItems).Notes;
+				note.Shops.RemoveAll(x => x.ShopEmail.Equals(availableItems.UserEmail));
+				shop.ResponseTime = DateTime.Now;
+				shop.ShopStatus = 1;
+				note.Shops.Add(shop);
+				if (await noteCosmosDBService.ReplaceDocumentAsync(note.SelfLink, note))
+				{
+					string title = $"The shop {shop.ShopName} has responded to your order";
+					await pushNotificationService.SendNotification(note.PhoneGuid, title, title);
+					return Ok("Note Successfully Updated");
+				}
+				return StatusCode(500, "Unable to update the status");
 			}
-			return NoContent();
+			return BadRequest("Specified Note doesn't exist");
 		}
 
 		[HttpDelete("deleteorder")]
 		public async Task<ActionResult> DeleteOrder(ConfirmOrderDTO orderDetails)
 		{
-			Tuple<string, string> result = await cosmosDBService.DeleteOrder(orderDetails.NoteId, orderDetails.ShopEmail);
-			if (result != null)
+			NoteModel note = await noteCosmosDBService.GetNote(orderDetails.NoteId);
+			if (note != null)
 			{
-				string notification = $"The shop {result.Item2} has cancelled the order";
-				await pushNotificationService.SendNotification(result.Item1, notification, notification);
-				return Ok("Order Cancelled Successfully");
+				string shopName = note.Shops.First(x => x.ShopEmail.Equals(orderDetails.ShopEmail)).ShopName;
+				note.Shops.RemoveAll(x => x.ShopEmail.Equals(orderDetails.ShopEmail));
+				if (await noteCosmosDBService.ReplaceDocumentAsync(note.SelfLink, note))
+				{
+					string notification = $"The shop {shopName} has cancelled the order";
+					await pushNotificationService.SendNotification(note.PhoneGuid, notification, notification);
+					return Ok("Order Cancelled Successfully");
+				}
+				return StatusCode(500, "Unable to cancel the order");
 			}
-			return Ok("Unable to cancel the order");
+			return BadRequest("Specified Note doesn't exist");
 		}
 
 		[HttpPost("changeorderstatus")]
 		public async Task<ActionResult> ChangeOrderStatus(ShopOrderStatusDTO orderStatus)
 		{
-			string userGuid = await cosmosDBService.UpdateShopOrderStatus(orderStatus.NoteId, orderStatus.ShopEmail, orderStatus.Status);
-			if (userGuid != null)
+			NoteModel note = await noteCosmosDBService.GetNote(orderStatus.NoteId);
+			if (note != null)
 			{
-				string notification = null;
-				if (orderStatus.Status == 2)
-					notification = "Shop has packed your order";
-				else if (orderStatus.Status == 3)
-					notification = "Shop has completed your order";
-				if (!string.IsNullOrEmpty(notification))
-					await pushNotificationService.SendNotification(userGuid, notification, notification);
-				return Ok("Successfully Updated the Shop Status");
+				string shopName = note.Shops.First(x => x.ShopEmail.Equals(orderStatus.ShopEmail)).ShopName;
+				note.Shops.First(x => x.ShopEmail.Equals(orderStatus.ShopEmail)).ShopStatus = orderStatus.Status;
+				if (await noteCosmosDBService.ReplaceDocumentAsync(note.SelfLink, note))
+				{
+					string notification = null;
+					if (orderStatus.Status == 2)
+						notification = $"The Shop {shopName} has packed your order";
+					else if (orderStatus.Status == 3)
+						notification = $"The Shop {shopName} has completed your order";
+					if (!string.IsNullOrEmpty(notification))
+						await pushNotificationService.SendNotification(note.PhoneGuid, notification, notification);
+					return Ok("Successfully Updated the Shop Status");
+				}
+				return StatusCode(500, "Unable to change the order status");
 			}
-			return BadRequest("Something went Wrong!");
+			return BadRequest("Specified Note doesn't exist");
 		}
 	}
 }

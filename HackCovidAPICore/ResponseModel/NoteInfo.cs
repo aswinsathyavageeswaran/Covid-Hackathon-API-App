@@ -19,26 +19,15 @@ namespace HackCovidAPICore.ResponseModel
 		public Point Location { get; set; }
 	}
 
-	public class Shop
-	{
-		public string ShopEmail { get; set; }
-		public DateTime ResponseTime { get; set; }
-		public bool Accepted { get; set; }
-		public string PhoneNumber { get; set; }
-		public string DeliveryNumber { get; set; }
-		public string Address { get; set; }
-		public double Distance { get; set; }
-		public string ShopName { get; set; }
-		public Point Location { get; set; }
-		public List<Note> Notes { get; set; }
-		public int ShopStatus { get; set; }
-		public string PhoneGuid { get; set; }
-	}
-
 	public class Note
 	{
 		public string Description { get; set; }
 		public string Quantity { get; set; }
 		public string Metric { get; set; }
+	}
+
+	public class NotesInfo
+	{
+		public List<NoteInfo> NoteInfo { get; set; }
 	}
 }

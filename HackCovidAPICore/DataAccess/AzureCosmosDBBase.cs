@@ -36,6 +36,17 @@ namespace HackCovidAPICore.DataAccess
 			return false;
 		}
 
+		public async Task<T> CreateAndReturnDocumentAsync<T>(T schema)
+		{
+			try
+			{
+				Document document = await client.CreateDocumentAsync(collectionLink, schema, null, false);
+				return (dynamic)document;
+			}
+			catch { }
+			return default;
+		}
+
 		public async Task<List<T>> CreateDocumentQueryAsList<T>(string queryString)
 		{
 			try
