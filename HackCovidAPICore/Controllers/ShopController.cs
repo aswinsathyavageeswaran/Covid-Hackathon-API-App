@@ -94,7 +94,7 @@ namespace HackCovidAPICore.Controllers
 			return BadRequest("Specified Note doesn't exist");
 		}
 
-		[HttpDelete("deleteorder")]
+		[HttpPut("deleteorder")]
 		public async Task<ActionResult> DeleteOrder(ConfirmOrderDTO orderDetails)
 		{
 			NoteModel note = await noteCosmosDBService.GetNote(orderDetails.NoteId);
