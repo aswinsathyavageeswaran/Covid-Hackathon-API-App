@@ -48,6 +48,15 @@ namespace HackCovidAPICore.Controllers
 
 		}
 
+		[HttpGet("verifyuser")]
+		public async Task<ActionResult> VerifyUser(string phoneNumber)
+		{
+			ShopModel shop = await userCosmosDBService.VerifyUser(phoneNumber);
+			if(shop!=null)
+				return Ok(mapper.Map<UserInfo>(shop));
+			return BadRequest("Invalid User");
+		}
+
 		[HttpPost("login")]
 		public async Task<ActionResult> Login(UserLoginDTO user)
 		{
