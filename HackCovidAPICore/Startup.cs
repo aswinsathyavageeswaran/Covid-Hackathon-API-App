@@ -26,6 +26,9 @@ namespace HackCovidAPICore
 			services.AddSingleton<INoteCosmosDB>(x => new NoteCosmosDB(Configuration.GetConnectionString("NoteCosmosDB")));
 			services.AddSingleton<IUserCosmosDB>(x=> new UserCosmosDB(Configuration.GetConnectionString("UserCosmosDB")));
 			services.AddSingleton(typeof(IPushNotificationService), typeof(PushNotificationService));
+			services.AddSingleton<IFiles>(x=> new Files(
+				Configuration.GetValue<string>("BlobStorageConfiguration:PrimaryKey"),
+				Configuration.GetValue<string>("BlobStorageConfiguration:ContainerName")));
 			services.AddCors();
 		}
 
