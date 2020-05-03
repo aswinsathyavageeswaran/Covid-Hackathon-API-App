@@ -31,7 +31,7 @@ namespace HackCovidAPICore.ResponseModel
 		[JsonProperty(PropertyName = "Address")]
 		public string Address { get; set; }
 
-		[JsonProperty(PropertyName = "NoteTime")]
+		[JsonProperty(PropertyName = "Distance")]
 		public double Distance { get; set; }
 
 		[JsonProperty(PropertyName = "ShopName")]
