@@ -5,7 +5,7 @@ namespace HackCovidAPICore.DataAccess
 {
 	public class PushNotificationService : IPushNotificationService
     {
-        private readonly string endPointUrl = "https://testapp-2b0a4.web.app/api/v1/sendNotification?";
+        private readonly string endPointUrl = "https://locatezdev.web.app/api/v1/sendNotification?";
         private HttpClient client;
 
         public PushNotificationService()
