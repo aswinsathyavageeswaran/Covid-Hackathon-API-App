@@ -48,6 +48,15 @@ namespace HackCovidAPICore.Controllers
 
 		}
 
+		[HttpGet("verifyuser")]
+		public async Task<ActionResult> VerifyUser(string phoneNumber)
+		{
+			ShopModel shop = await userCosmosDBService.VerifyUser(phoneNumber);
+			if(shop!=null)
+				return Ok(mapper.Map<UserInfo>(shop));
+			return BadRequest("Invalid User");
+		}
+
 		[HttpPost("login")]
 		public async Task<ActionResult> Login(UserLoginDTO user)
 		{
@@ -163,6 +172,26 @@ namespace HackCovidAPICore.Controllers
 				if (await noteCosmosDBService.ReplaceDocumentAsync(note.SelfLink, note))
 				{
 					string notification = $"The user {note.UserId} has completed the order";
+					await pushNotificationService.SendNotification(note.Shops.First().PhoneGuid, notification, notification);
+					return Ok("Order Completed Successfully");
+				}
+				return StatusCode(500, "Error updating the Status");
+			}
+			return BadRequest("Couldn't find the note specified");
+		}
+
+
+
+		[HttpPost("cancelorder")]
+		public async Task<ActionResult> CancelOrder(string noteId)
+		{
+			NoteModel note = await noteCosmosDBService.GetNote(noteId);
+			if (note != null)
+			{
+				note.Status = 3;
+				if (await noteCosmosDBService.ReplaceDocumentAsync(note.SelfLink, note))
+				{
+					string notification = $"The user {note.UserId} has cancelled the order";
 					await pushNotificationService.SendNotification(note.Shops.First().PhoneGuid, notification, notification);
 					return Ok("Order Completed Successfully");
 				}

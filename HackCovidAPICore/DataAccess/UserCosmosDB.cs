@@ -16,6 +16,11 @@ namespace HackCovidAPICore.DataAccess
 				return true;
 			return false;
 		}
+		public async Task<ShopModel> VerifyUser(string userPhone)
+		{
+			var query = $"SELECT * FROM c WHERE c.PhoneNumber = '{userPhone}'";
+			return await CreateDocumentQuery<ShopModel>(query);
+		}
 
 		public async Task<ShopModel> GetUserInfo(string userEmail)
 		{

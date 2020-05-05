@@ -13,5 +13,6 @@ namespace HackCovidAPICore.DataAccess
 		Task<ShopModel> GetUserInfo(string userEmail);
 		Task<bool> ReplaceDocumentAsync<ShopModel>(string selfLink, ShopModel schema);
 		Task<List<ShopModel>> GetShops(int businessType);
+		Task<ShopModel> VerifyUser(string userPhone);
 	}
 }
