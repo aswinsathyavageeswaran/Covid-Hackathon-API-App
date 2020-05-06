@@ -120,7 +120,7 @@ namespace HackCovidAPICore.Controllers
 					var notificationData = new NotificationData()
 					{
 						msgBody = notification,
-						msgTitle = notification,
+						msgTitle = "Shop has cancelled the order",
 						tokenList = note.PhoneGuid,
 						options = data
 					};
@@ -143,10 +143,18 @@ namespace HackCovidAPICore.Controllers
 				if (await noteCosmosDBService.ReplaceDocumentAsync(note.SelfLink, note))
 				{
 					string notification = null;
+                    string title = null;
 					if (orderStatus.Status == 2)
+                    {
 						notification = $"The Shop {shopName} has packed your order";
+                        title = "Shop has packed your order";
+                    }
+                      
 					else if (orderStatus.Status == 3)
-						notification = $"The Shop {shopName} has completed your order";
+                    {
+						notification = $"The Shop {shopName} has delivered your order";
+                        title = "Shop has delivered your order";
+                    }
 					if (!string.IsNullOrEmpty(notification))
 					{
 						var data = new Dictionary<string, string>();

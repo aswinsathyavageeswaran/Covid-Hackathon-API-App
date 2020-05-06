@@ -190,7 +190,7 @@ namespace HackCovidAPICore.Controllers
 					var notificationData = new NotificationData()
 					{
 						msgBody = notification,
-						msgTitle = notification,
+						msgTitle = "User has completed the order",
 						tokenList = note.PhoneGuid,
 						options = data
 					};
@@ -219,12 +219,12 @@ namespace HackCovidAPICore.Controllers
 					var notificationData = new NotificationData()
 					{
 						msgBody = notification,
-						msgTitle = notification,
+						msgTitle = "User has cancelled the order",
 						tokenList = note.PhoneGuid,
 						options = data
 					};
 					await pushNotificationService.SendNotification(notificationData);
-					return Ok("Order Completed Successfully");
+					return Ok("Order Cancelled Successfully");
 				}
 				return StatusCode(500, "Error updating the Status");
 			}
