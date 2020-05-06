@@ -85,13 +85,13 @@ namespace HackCovidAPICore.Controllers
 				note.Shops.Add(shop);
 				if (await noteCosmosDBService.ReplaceDocumentAsync(note.SelfLink, note))
 				{
-					string title = $"The shop {shop.ShopName} has responded to your order";
+					string title = $"The shop {shop.ShopName} has responded to your order"; 
 					var data = new Dictionary<string, string>();
 					data.Add("orderid", note.Id);
 					var notificationData = new NotificationData()
 					{
 						msgBody = title,
-						msgTitle = title,
+						msgTitle = "A Shop has responed to your order",
 						tokenList = note.PhoneGuid,
 						options = data
 					};

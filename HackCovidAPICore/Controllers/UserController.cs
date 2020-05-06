@@ -96,12 +96,12 @@ namespace HackCovidAPICore.Controllers
 			if (shops?.Count > 0)
 			{
 				List<ShopModel> nearbyShops = DistanceCalculator.GetDistance(shops, noteDTO.Latitude, noteDTO.Longitude);
-				string body = string.Format("You have received a new request from {0}", noteDTO.UserPhoneNumber);
+				string body = string.Format("You have received a new order request from {0}", noteDTO.UserPhoneNumber);
 				var phoneGuidList = nearbyShops.Select(shop => shop.PhoneGuid);
 				var notificationData = new NotificationData()
 				{
 					msgBody = body,
-					msgTitle = "You have received a new request",
+					msgTitle = "You have received a new order request",
 					tokenList = phoneGuidList,
 					options = null
 				};
@@ -150,7 +150,7 @@ namespace HackCovidAPICore.Controllers
 					var notificationData = new NotificationData()
 					{
 						msgBody = notification,
-						msgTitle = notification,
+						msgTitle = "User has confirmed the order with you",
 						tokenList = note.PhoneGuid,
 						options = data
 					};
