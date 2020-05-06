@@ -10,6 +10,7 @@ using HackCovidAPICore.Utilities;
 using HackCovidAPICore.ResponseModel;
 using System.Device.Location;
 using System.Linq;
+using System.ComponentModel;
 
 namespace HackCovidAPICore.Controllers
 {
@@ -46,6 +47,12 @@ namespace HackCovidAPICore.Controllers
 				return Ok("Shop Successfully Registered");
 			return StatusCode(500, "Something went wrong");
 
+		}
+
+		[HttpGet("userexists")]
+		public async Task<ActionResult> UserExists(string userEmail)
+		{
+			return Ok(await userCosmosDBService.UserExists(userEmail.ToLower()));
 		}
 
 		[HttpGet("verifyuser")]
@@ -96,13 +103,6 @@ namespace HackCovidAPICore.Controllers
 			if (shops?.Count > 0)
 			{
 				List<ShopModel> nearbyShops = DistanceCalculator.GetDistance(shops, noteDTO.Latitude, noteDTO.Longitude);
-
-				foreach (ShopModel shop in nearbyShops)
-				{
-					string body = string.Format("You have received a new request from {0}", noteDTO.UserPhoneNumber);
-					await pushNotificationService.SendNotification(shop.PhoneGuid, "You have received a new request", body);
-				}
-
 				//Mapping
 				NoteModel note = mapper.Map<NoteModel>(noteDTO);
 				ShopsModel shopsModel = new ShopsModel();
@@ -113,8 +113,14 @@ namespace HackCovidAPICore.Controllers
 				//Assigning fields
 				note.NoteTime = DateTime.Now;
 				note.Status = 0;
-
+				
+				foreach (ShopModel shop in nearbyShops)
+				{
+					string body = string.Format("You have received a new request from {0}", noteDTO.UserPhoneNumber);
+					await pushNotificationService.SendNotification(shop.PhoneGuid, "You have received a new request", body).ConfigureAwait(false);
+				}
 				note = await noteCosmosDBService.CreateAndReturnDocumentAsync(note);
+
 				if (note != null)
 					return Ok(mapper.Map<NoteInfo>(note));
 			}
