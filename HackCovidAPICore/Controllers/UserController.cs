@@ -68,7 +68,7 @@ namespace HackCovidAPICore.Controllers
 			}
 			return BadRequest("Invalid Username or Password");
 		}
-
+		
 		[HttpPost("updateprofile")]
 		public async Task<ActionResult> UpdateProfile(UpdateProfileDTO updateProfileDTO)
 		{
@@ -96,13 +96,17 @@ namespace HackCovidAPICore.Controllers
 			if (shops?.Count > 0)
 			{
 				List<ShopModel> nearbyShops = DistanceCalculator.GetDistance(shops, noteDTO.Latitude, noteDTO.Longitude);
-
-				foreach (ShopModel shop in nearbyShops)
+				string body = string.Format("You have received a new request from {0}", noteDTO.UserPhoneNumber);
+				var phoneGuidList = nearbyShops.Select(shop => shop.PhoneGuid);
+				var notificationData = new NotificationData()
 				{
-					string body = string.Format("You have received a new request from {0}", noteDTO.UserPhoneNumber);
-					await pushNotificationService.SendNotification(shop.PhoneGuid, "You have received a new request", body);
-				}
-
+					msgBody = body,
+					msgTitle = "You have received a new request",
+					tokenList = phoneGuidList,
+					options = null
+				};
+				await pushNotificationService.SendNotification(notificationData);
+				
 				//Mapping
 				NoteModel note = mapper.Map<NoteModel>(noteDTO);
 				ShopsModel shopsModel = new ShopsModel();
@@ -141,7 +145,16 @@ namespace HackCovidAPICore.Controllers
 				if (await noteCosmosDBService.ReplaceDocumentAsync(note.SelfLink, note))
 				{
 					string notification = $"The user {note.UserId} has confirmed the order with you";
-					await pushNotificationService.SendNotification(note.Shops.First().PhoneGuid, notification, notification);
+					var data = new Dictionary<string, string>();
+					data.Add("orderid", note.Id);
+					var notificationData = new NotificationData()
+					{
+						msgBody = notification,
+						msgTitle = notification,
+						tokenList = note.PhoneGuid,
+						options = data
+					};
+					await pushNotificationService.SendNotification(notificationData);
 					return Ok("Order Confirmed with the shop");
 				}
 				return StatusCode(500, "Something went wrong");
@@ -172,7 +185,16 @@ namespace HackCovidAPICore.Controllers
 				if (await noteCosmosDBService.ReplaceDocumentAsync(note.SelfLink, note))
 				{
 					string notification = $"The user {note.UserId} has completed the order";
-					await pushNotificationService.SendNotification(note.Shops.First().PhoneGuid, notification, notification);
+					var data = new Dictionary<string, string>();
+					data.Add("orderid", note.Id);
+					var notificationData = new NotificationData()
+					{
+						msgBody = notification,
+						msgTitle = notification,
+						tokenList = note.PhoneGuid,
+						options = data
+					};
+					await pushNotificationService.SendNotification(notificationData);
 					return Ok("Order Completed Successfully");
 				}
 				return StatusCode(500, "Error updating the Status");
@@ -192,7 +214,16 @@ namespace HackCovidAPICore.Controllers
 				if (await noteCosmosDBService.ReplaceDocumentAsync(note.SelfLink, note))
 				{
 					string notification = $"The user {note.UserId} has cancelled the order";
-					await pushNotificationService.SendNotification(note.Shops.First().PhoneGuid, notification, notification);
+					var data = new Dictionary<string, string>();
+					data.Add("orderid", note.Id);
+					var notificationData = new NotificationData()
+					{
+						msgBody = notification,
+						msgTitle = notification,
+						tokenList = note.PhoneGuid,
+						options = data
+					};
+					await pushNotificationService.SendNotification(notificationData);
 					return Ok("Order Completed Successfully");
 				}
 				return StatusCode(500, "Error updating the Status");
