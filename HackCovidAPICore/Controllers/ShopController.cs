@@ -85,8 +85,18 @@ namespace HackCovidAPICore.Controllers
 				note.Shops.Add(shop);
 				if (await noteCosmosDBService.ReplaceDocumentAsync(note.SelfLink, note))
 				{
-					string title = $"The shop {shop.ShopName} has responded to your order";
-					await pushNotificationService.SendNotification(note.PhoneGuid, title, title);
+					string title = $"The shop {shop.ShopName} has responded to your order"; 
+					var data = new Dictionary<string, string>();
+					data.Add("orderid", note.Id);
+					var notificationData = new NotificationData()
+					{
+						msgBody = title,
+						msgTitle = "A Shop has responed to your order",
+						tokenList = note.PhoneGuid
+						//options = data
+					};
+
+					pushNotificationService.SendNotification(notificationData);
 					return Ok("Note Successfully Updated");
 				}
 				return StatusCode(500, "Unable to update the status");
@@ -105,7 +115,16 @@ namespace HackCovidAPICore.Controllers
 				if (await noteCosmosDBService.ReplaceDocumentAsync(note.SelfLink, note))
 				{
 					string notification = $"The shop {shopName} has cancelled the order";
-					await pushNotificationService.SendNotification(note.PhoneGuid, notification, notification);
+					var data = new Dictionary<string, string>();
+					data.Add("orderid", note.Id);
+					var notificationData = new NotificationData()
+					{
+						msgBody = notification,
+						msgTitle = "Shop has cancelled the order",
+						tokenList = note.PhoneGuid
+						//options = data
+					};
+					pushNotificationService.SendNotification(notificationData);
 					return Ok("Order Cancelled Successfully");
 				}
 				return StatusCode(500, "Unable to cancel the order");
@@ -124,12 +143,31 @@ namespace HackCovidAPICore.Controllers
 				if (await noteCosmosDBService.ReplaceDocumentAsync(note.SelfLink, note))
 				{
 					string notification = null;
+                    string title = null;
 					if (orderStatus.Status == 2)
+                    {
 						notification = $"The Shop {shopName} has packed your order";
+                        title = "Shop has packed your order";
+                    }
+                      
 					else if (orderStatus.Status == 3)
-						notification = $"The Shop {shopName} has completed your order";
+                    {
+						notification = $"The Shop {shopName} has delivered your order";
+                        title = "Shop has delivered your order";
+                    }
 					if (!string.IsNullOrEmpty(notification))
-						await pushNotificationService.SendNotification(note.PhoneGuid, notification, notification);
+					{
+						var data = new Dictionary<string, string>();
+						data.Add("orderid", note.Id);
+						var notificationData = new NotificationData()
+						{
+							msgBody = notification,
+							msgTitle = notification,
+							tokenList = note.PhoneGuid
+							//options = data
+						};
+						pushNotificationService.SendNotification(notificationData);
+					}
 					return Ok("Successfully Updated the Shop Status");
 				}
 				return StatusCode(500, "Unable to change the order status");

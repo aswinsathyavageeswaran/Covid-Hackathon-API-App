@@ -7,6 +7,6 @@ namespace HackCovidAPICore.DataAccess
 {
     public interface IPushNotificationService
     {
-        Task<bool> SendNotification(string uid, string title, string body);
+        bool SendNotification(NotificationData notificationData);
     }
 }
