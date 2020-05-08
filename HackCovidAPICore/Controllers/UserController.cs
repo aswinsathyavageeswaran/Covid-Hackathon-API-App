@@ -10,6 +10,7 @@ using HackCovidAPICore.Utilities;
 using HackCovidAPICore.ResponseModel;
 using System.Device.Location;
 using System.Linq;
+using System.Threading;
 
 namespace HackCovidAPICore.Controllers
 {
@@ -97,15 +98,35 @@ namespace HackCovidAPICore.Controllers
 			{
 				List<ShopModel> nearbyShops = DistanceCalculator.GetDistance(shops, noteDTO.Latitude, noteDTO.Longitude);
 				string body = string.Format("You have received a new order request from {0}", noteDTO.UserPhoneNumber);
-				var phoneGuidList = nearbyShops.Select(shop => shop.PhoneGuid);
-				var notificationData = new NotificationData()
+				var phoneGuidList = nearbyShops.Where(s=>s.PhoneGuid != null).Select(shop => shop.PhoneGuid).ToList();
+				NotificationData notificationData = null;
+				var data = new Dictionary<string, string>();
+				data.Add("orderid", "test");
+				if (phoneGuidList.Count() > 0)
 				{
-					msgBody = body,
-					msgTitle = "You have received a new order request",
-					tokenList = phoneGuidList,
-					options = null
-				};
-				await pushNotificationService.SendNotification(notificationData);
+					if (phoneGuidList.Count() == 1)
+					{
+						notificationData = new NotificationData()
+						{
+							msgBody = body,
+							msgTitle = "You have received a new order request",
+							tokenList = phoneGuidList[0]
+							//options = data
+						};
+					}
+					else
+					{
+						notificationData = new NotificationData()
+						{
+							msgBody = body,
+							msgTitle = "You have received a new order request",
+							tokenList = phoneGuidList
+							//options = data
+						};
+					}
+
+					pushNotificationService.SendNotification(notificationData);
+				}
 				
 				//Mapping
 				NoteModel note = mapper.Map<NoteModel>(noteDTO);
@@ -151,10 +172,10 @@ namespace HackCovidAPICore.Controllers
 					{
 						msgBody = notification,
 						msgTitle = "User has confirmed the order with you",
-						tokenList = note.PhoneGuid,
-						options = data
+						tokenList = note.PhoneGuid
+						//options = data
 					};
-					await pushNotificationService.SendNotification(notificationData);
+					pushNotificationService.SendNotification(notificationData);
 					return Ok("Order Confirmed with the shop");
 				}
 				return StatusCode(500, "Something went wrong");
@@ -191,10 +212,10 @@ namespace HackCovidAPICore.Controllers
 					{
 						msgBody = notification,
 						msgTitle = "User has completed the order",
-						tokenList = note.PhoneGuid,
-						options = data
+						tokenList = note.PhoneGuid
+						//options = data
 					};
-					await pushNotificationService.SendNotification(notificationData);
+					pushNotificationService.SendNotification(notificationData);
 					return Ok("Order Completed Successfully");
 				}
 				return StatusCode(500, "Error updating the Status");
@@ -220,15 +241,29 @@ namespace HackCovidAPICore.Controllers
 					{
 						msgBody = notification,
 						msgTitle = "User has cancelled the order",
-						tokenList = note.PhoneGuid,
-						options = data
+						tokenList = note.PhoneGuid
+						//options = data
 					};
-					await pushNotificationService.SendNotification(notificationData);
+					pushNotificationService.SendNotification(notificationData);
 					return Ok("Order Cancelled Successfully");
 				}
 				return StatusCode(500, "Error updating the Status");
 			}
 			return BadRequest("Couldn't find the note specified");
+		}
+
+		[HttpPost("sendtestnotif")]
+		public async void sendnotiftest()
+		{
+			var notificationData = new NotificationData()
+			{
+				msgBody = "test body",
+				msgTitle = "test title",
+				tokenList = "eGjN9R9G0yg:APA91bE4GOlbEItwdomRVLqWdDrZpsf8TG8Y1tz3HJIf4BRdY6J867Th_XNE3Q6poZS0zdwN9GXsbrWmvBCvAM8FWIIiYmvA9jZaN-N0D5NAiIq0b88R0YhawQvHpu8b2ROJj5tnJpma"
+				//options = data
+			};
+			pushNotificationService.SendNotification(notificationData);
+
 		}
 	}
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace HackCovidAPICore.DataAccess
@@ -20,22 +21,27 @@ namespace HackCovidAPICore.DataAccess
             catch { }
         }
        
-        public async Task<bool> SendNotification(NotificationData notificationData)
+        public bool SendNotification(NotificationData notificationData)
         {
             try
             {
-                string json = JsonConvert.SerializeObject(notificationData, Formatting.Indented);
-                var httpContent = new StringContent(json);
-                httpContent.Headers.Clear();
-                httpContent.Headers.Add("Content-Type", "application/json");
-                await client.PostAsync(endPointUrl, httpContent);
+                new Thread(async () =>
+                {
+                    Thread.CurrentThread.IsBackground = true;                   
+                    string json = JsonConvert.SerializeObject(notificationData, Formatting.Indented);
+                    var httpContent = new StringContent(json);  
+                    httpContent.Headers.Clear();
+                    httpContent.Headers.Add("Content-Type", "application/json");
+                    await client.PostAsync(endPointUrl, httpContent);
+                }).Start();
+               
                 return true;
             }
             catch(Exception ex) { }
 
             return false;
         }
-
+        
     }
 
     public class NotificationData
@@ -43,6 +49,7 @@ namespace HackCovidAPICore.DataAccess
         public object tokenList { get; set; }
         public string msgTitle { get; set; }
         public string msgBody { get; set; }
-        public Dictionary<string, string> options { get; set; }
+        //public Dictionary<string, string> options { get; set; }
     }
+
 }

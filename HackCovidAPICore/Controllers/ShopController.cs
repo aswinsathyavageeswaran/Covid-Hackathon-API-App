@@ -92,11 +92,11 @@ namespace HackCovidAPICore.Controllers
 					{
 						msgBody = title,
 						msgTitle = "A Shop has responed to your order",
-						tokenList = note.PhoneGuid,
-						options = data
+						tokenList = note.PhoneGuid
+						//options = data
 					};
 
-					await pushNotificationService.SendNotification(notificationData);
+					pushNotificationService.SendNotification(notificationData);
 					return Ok("Note Successfully Updated");
 				}
 				return StatusCode(500, "Unable to update the status");
@@ -121,10 +121,10 @@ namespace HackCovidAPICore.Controllers
 					{
 						msgBody = notification,
 						msgTitle = "Shop has cancelled the order",
-						tokenList = note.PhoneGuid,
-						options = data
+						tokenList = note.PhoneGuid
+						//options = data
 					};
-					await pushNotificationService.SendNotification(notificationData);
+					pushNotificationService.SendNotification(notificationData);
 					return Ok("Order Cancelled Successfully");
 				}
 				return StatusCode(500, "Unable to cancel the order");
@@ -163,10 +163,10 @@ namespace HackCovidAPICore.Controllers
 						{
 							msgBody = notification,
 							msgTitle = notification,
-							tokenList = note.PhoneGuid,
-							options = data
+							tokenList = note.PhoneGuid
+							//options = data
 						};
-						await pushNotificationService.SendNotification(notificationData);
+						pushNotificationService.SendNotification(notificationData);
 					}
 					return Ok("Successfully Updated the Shop Status");
 				}
