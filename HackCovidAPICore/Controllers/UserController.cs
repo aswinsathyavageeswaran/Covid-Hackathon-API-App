@@ -11,6 +11,7 @@ using HackCovidAPICore.ResponseModel;
 using System.Device.Location;
 using System.Linq;
 using System.Threading;
+using System.ComponentModel;
 
 namespace HackCovidAPICore.Controllers
 {
@@ -47,6 +48,12 @@ namespace HackCovidAPICore.Controllers
 				return Ok("Shop Successfully Registered");
 			return StatusCode(500, "Something went wrong");
 
+		}
+
+		[HttpGet("userexists")]
+		public async Task<ActionResult> UserExists(string userEmail)
+		{
+			return Ok(await userCosmosDBService.UserExists(userEmail.ToLower()));
 		}
 
 		[HttpGet("verifyuser")]

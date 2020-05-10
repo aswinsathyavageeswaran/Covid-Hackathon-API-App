@@ -18,7 +18,7 @@ namespace HackCovidAPICore.Utilities
 				{
 					x.Distance = Math.Round((new GeoCoordinate(x.Location.Position.Latitude, x.Location.Position.Longitude).GetDistanceTo(coord)) * 1.60934 / 1000, 2);
 				});
-				return shops.Where(x => x.Distance < 10).OrderBy(x => x.Distance).OrderBy(x => x.Status).ToList();
+				return shops.Where(x => x.Distance < 20).OrderBy(x => x.Distance).OrderBy(x => x.Status).ToList();
 			}
 			catch { }
 			return null;
