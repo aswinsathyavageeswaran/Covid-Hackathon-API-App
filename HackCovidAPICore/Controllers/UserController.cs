@@ -160,7 +160,8 @@ namespace HackCovidAPICore.Controllers
 			NoteModel note = await noteCosmosDBService.GetNote(confirmOrder.NoteId);
 			if (note != null)
 			{
-				note.Shops.First(x => x.ShopEmail.Equals(confirmOrder.ShopEmail)).Accepted = true;
+				var shop = note.Shops.First(x => x.ShopEmail.Equals(confirmOrder.ShopEmail));
+				shop.Accepted = true;
 				note.Shops.RemoveAll(x => x.ShopEmail != confirmOrder.ShopEmail);
 				note.Status = 1;
 				if (await noteCosmosDBService.ReplaceDocumentAsync(note.SelfLink, note))
@@ -172,7 +173,7 @@ namespace HackCovidAPICore.Controllers
 					{
 						msgBody = notification,
 						msgTitle = "User has confirmed the order with you",
-						tokenList = note.PhoneGuid
+						tokenList = shop.PhoneGuid
 						//options = data
 					};
 					pushNotificationService.SendNotification(notificationData);
@@ -259,7 +260,7 @@ namespace HackCovidAPICore.Controllers
 			{
 				msgBody = "test body",
 				msgTitle = "test title",
-				tokenList = "eGjN9R9G0yg:APA91bE4GOlbEItwdomRVLqWdDrZpsf8TG8Y1tz3HJIf4BRdY6J867Th_XNE3Q6poZS0zdwN9GXsbrWmvBCvAM8FWIIiYmvA9jZaN-N0D5NAiIq0b88R0YhawQvHpu8b2ROJj5tnJpma"
+				tokenList = "fbHa8ogLChM:APA91bEsyQs7wbg7GNo_50I3LEhACfRGc_hleNk0Y9NJitvdUx4WWWsjOGysWX5zkjP7U08WSpKIpk4AmWQEVNAHs-el9Frh9ju1zWr4ROi7ZsfaeJRmH4vTvJo35LdgZbQsTCvxc6VO"
 				//options = data
 			};
 			pushNotificationService.SendNotification(notificationData);

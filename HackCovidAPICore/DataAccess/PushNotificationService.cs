@@ -25,14 +25,14 @@ namespace HackCovidAPICore.DataAccess
         {
             try
             {
-                new Thread(async () =>
+                new Thread( () =>
                 {
                     Thread.CurrentThread.IsBackground = true;                   
                     string json = JsonConvert.SerializeObject(notificationData, Formatting.Indented);
                     var httpContent = new StringContent(json);  
                     httpContent.Headers.Clear();
                     httpContent.Headers.Add("Content-Type", "application/json");
-                    await client.PostAsync(endPointUrl, httpContent);
+                    var result =client.PostAsync(endPointUrl, httpContent).Result;
                 }).Start();
                
                 return true;
