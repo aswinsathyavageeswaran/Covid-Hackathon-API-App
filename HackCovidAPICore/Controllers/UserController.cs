@@ -105,7 +105,7 @@ namespace HackCovidAPICore.Controllers
 			{
 				List<ShopModel> nearbyShops = DistanceCalculator.GetDistance(shops, noteDTO.Latitude, noteDTO.Longitude);
 				string body = string.Format("You have received a new order request from {0}", noteDTO.UserPhoneNumber);
-				var phoneGuidList = nearbyShops.Where(s=>s.PhoneGuid != null).Select(shop => shop.PhoneGuid).ToList();
+				var phoneGuidList = nearbyShops.Where(s=>s.PhoneGuid != null)?.Select(shop => shop.PhoneGuid).ToList();
 				NotificationData notificationData = null;
 				var data = new Dictionary<string, string>();
 				data.Add("orderid", "test");
