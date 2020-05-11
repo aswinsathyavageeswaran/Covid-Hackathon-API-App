@@ -39,6 +39,7 @@ namespace HackCovidAPICore.Utilities
 
 			CreateMap<ShopModel, ResponseModel.Shop>()
 				.ForMember(dest=>dest.ShopId, opt=>opt.MapFrom(src=>src.Id))
+				.ForMember(dest => dest.ShopStatus, opt => opt.MapFrom(src => src.Status))
 				.ForMember(dest=>dest.ShopEmail, opt=>opt.MapFrom(src=>src.UserEmail));
 
 			CreateMap<ShopsModel, ResponseModel.Shops>()
