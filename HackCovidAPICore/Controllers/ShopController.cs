@@ -48,6 +48,7 @@ namespace HackCovidAPICore.Controllers
 		public async Task<ActionResult> GetNearbyShops(ShopsNearbyDTO shopsNearbyDTO)
 		{
 			List<ShopModel> shops = await userCosmosDBService.GetShops(shopsNearbyDTO.TypeOfBusiness);
+			shops.RemoveAll(x => x.Status.Equals(2));
 			if (shops?.Count > 0)
 			{
 				ShopsModel shopsModel = new ShopsModel();
